@@ -22,7 +22,7 @@ public class AssemblerController {
             assembler.parseFirstPass(program);
             assembler.parseSecondPass(program);
         } catch (UnknownInstructionException exception) {
-            System.out.println("프로그램이 실행 중 오류로 인해 종료되었습니다.");
+            OutputView.printErrorAnnouncement();
         }
 
 

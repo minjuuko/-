@@ -2,6 +2,7 @@ package com.jnuhw.bcfirst.domain;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
 import com.jnuhw.bcfirst.background.Label;
+import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,7 +112,7 @@ public class Assembler {
                 try {
                     executeNonPseudoCommand(args);
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Line " + lc + " 에서 알 수 없는 Instruction을 발견 강제 종료 합니다. \n문제가 된 Instruction: { " + command + " } || 전체 문장 : " + command + " \n");
+                    OutputView.printUnknownInstructionError(lc, command);
                     throw new UnknownInstructionException();
                 }
             }
