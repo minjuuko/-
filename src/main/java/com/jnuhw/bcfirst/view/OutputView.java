@@ -14,4 +14,8 @@ public class OutputView {
         System.out.println("알 수 없는 Instruction 입니다. >");
         System.out.printf("[%d] %s", lc, command);
     }
+
+    public static void printDataOverflowError(int data) {
+        System.out.println("overflow 가 발생하였습습니다. data=" + data);
+    }
 }

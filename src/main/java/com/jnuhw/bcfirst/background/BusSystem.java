@@ -5,6 +5,8 @@ package com.jnuhw.bcfirst.background;
  * BusSystem 설계는 확정되지 않았기 때문에, 대부분의 코드가 변경될 예정입니다.
  */
 
+import com.jnuhw.bcfirst.domain.Memory;
+
 import java.util.HashMap;
 
 public class BusSystem {
@@ -18,14 +20,16 @@ public class BusSystem {
     }
 
     private final HashMap<RegisterType, Register> busSystem; // Bus System Register
-    private final Register[] memory; // 4096개의 레지스터를 저장할 수 있는 32-bit Memory ( 16-bit로 구현 하고 싶었으나, Java의 short형으로는 불가능, unsigned short는 없음 )
+    private final Register[] registers; // 4096개의 레지스터를 저장할 수 있는 32-bit Memory ( 16-bit로 구현 하고 싶었으나, Java의 short형으로는 불가능, unsigned short는 없음 )
+    private Memory memory = new Memory();
+
     private int popedData; // bus System에 pop 되어있는 Data
     private int memoryKey; // Memory의 0부터 되어지는 Key, 데이터가 Insert될때 1씩 늘어나며 아래서 부터 채움.
     private boolean E; // E Data
 
     public BusSystem() {
         busSystem = new HashMap<>();
-        memory = new Register[4096]; //
+        registers = new Register[4096]; //
         popedData = 0;
         memoryKey = 0;
 
@@ -42,7 +46,7 @@ public class BusSystem {
             type, key : 어떤 데이터를 Bus System에 pop할 지 결정한다.
      */
     public void popData(int key) {
-        popedData = memory[key].getData();
+        popedData = registers[key].getData();
     }
 
     public void popData(RegisterType type) {
@@ -84,9 +88,9 @@ public class BusSystem {
 
     public void insertMemory(int key, int data, boolean poped) { // Memory에 데이터를 입력함. key를 입력하지 않을 경우
         if(key < 4096) {
-            memory[key] = new Register();
+            registers[key] = new Register();
         }
-        memory[key].setData(poped ? popedData : data);
+        registers[key].setData(poped ? popedData : data);
     }
 
 
@@ -107,7 +111,7 @@ public class BusSystem {
             key : Memory의 데이터를 받아옴
      */
     public int getMemoryData(int key) {
-        return memory[key].getData();
+        return registers[key].getData();
     }
 
 

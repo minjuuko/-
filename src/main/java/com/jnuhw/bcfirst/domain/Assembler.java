@@ -1,7 +1,7 @@
 package com.jnuhw.bcfirst.domain;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.background.Label;
+import com.jnuhw.bcfirst.background.BusSystem;
 import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.ArrayList;
@@ -13,6 +13,9 @@ public class Assembler {
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
     private List<Integer> binaryInstruction = new ArrayList<>();
+
+    // 임시
+    private BusSystem busSystem = new BusSystem();
 
     /**
      * Symbol 을 선언하는 명령어들을 읽어서, Symbol 객체 생성

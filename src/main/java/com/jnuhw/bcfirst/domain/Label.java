@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.background;
+package com.jnuhw.bcfirst.domain;
 
 
 public class Label {
