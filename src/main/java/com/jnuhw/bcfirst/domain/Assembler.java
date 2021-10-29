@@ -10,18 +10,9 @@ import java.util.List;
 
 public class Assembler {
 
-    private int lc = 0;
+    private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
     private List<Integer> binaryInstruction = new ArrayList<>();
-
-    private void increaseLc() {
-        lc++;
-    }
-
-    private void resetLc() {
-        lc = 0;
-    }
-
 
     /**
      * Symbol 을 선언하는 명령어들을 읽어서, Symbol 객체 생성
@@ -47,7 +38,7 @@ public class Assembler {
                 break;
             }
 
-            increaseLc();
+            lcCounter.increaseLc();
         }
     }
 
@@ -71,15 +62,15 @@ public class Assembler {
         String label = args.get(0);
         int data = Integer.parseInt(args.get(2));
 
-        addressLabelTable.add(new Label(label, lc, data));
+        addressLabelTable.add(new Label(label, lcCounter.getLc(), data));
     }
 
     private void executeORG(int location) {
-        lc = location;
+        lcCounter.setLc(location);
     }
 
     public void parseSecondPass(List<String> program) throws UnknownInstructionException {
-        resetLc();
+        lcCounter.resetLc();
 
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
@@ -92,12 +83,12 @@ public class Assembler {
                 try {
                     executeNonPseudoCommand(args);
                 } catch (IllegalArgumentException e) {
-                    OutputView.printUnknownInstructionError(lc, command);
+                    OutputView.printUnknownInstructionError(lcCounter.getLc(), command);
                     throw new UnknownInstructionException();
                 }
             }
 
-            increaseLc();
+            lcCounter.increaseLc();
         }
     }
 
@@ -114,7 +105,7 @@ public class Assembler {
 
             // DEC, HEX 일시 데이터 입력
             Label label = addressLabelTable.stream()
-                    .filter(l -> l.getLc() == lc)
+                    .filter(l -> l.getLc() == lcCounter.getLc())
                     .findAny().get();
 
             binaryInstruction.add(label.getData());
