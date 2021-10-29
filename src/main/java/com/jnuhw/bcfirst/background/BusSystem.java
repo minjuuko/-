@@ -1,5 +1,10 @@
 package com.jnuhw.bcfirst.background;
 
+/**
+ * @deprecated class
+ * BusSystem 설계는 확정되지 않았기 때문에, 대부분의 코드가 변경될 예정입니다.
+ */
+
 import java.util.HashMap;
 
 public class BusSystem {

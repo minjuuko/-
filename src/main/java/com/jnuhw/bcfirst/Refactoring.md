@@ -19,9 +19,15 @@
   * label -> name
   * lcCount -> lc
 
+
+
+
+
+
 ### Implement task
-* ASsembler, 158줄
 * dec, hex instruction
 * get indirection code from enum
-* parse indrect 
-* 
+* parse indirect 
+
+
+* InputView 로 명령어 입력받기

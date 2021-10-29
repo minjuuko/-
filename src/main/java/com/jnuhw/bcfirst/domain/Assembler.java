@@ -7,7 +7,6 @@ import com.jnuhw.bcfirst.view.OutputView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Assembler {
 
@@ -26,7 +25,6 @@ public class Assembler {
 
     /**
      * Symbol 을 선언하는 명령어들을 읽어서, Symbol 객체 생성
-     *
      * @param program
      */
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
@@ -80,24 +78,6 @@ public class Assembler {
         lc = location;
     }
 
-
-    /*
-                Second PASS
-                1. Pseudo-Instruction (ORG, END, DEC, HEX) 인지 확인.
-                1-1. ORG 라면 LC를 ORG 뒤의 넘버로 SET
-                1-2. END 라면 완료
-                1-3. DEC나 HEX라면, LC의 장소에 데이터를 저장.
-
-                2. MRI ( Memory Refernce Instruction ) 인지 확인. -> AND, ADD, LDA, STA, BUN, BSA, ISZ
-                2-1 맞다면, 명령어를 분석해 2~4 bit 부분을 명령어로 정하고
-                2-2 Symbol Table과 대응해서 5~16 bit 부분의 비트를 정하고
-                2-3 Indirect/Direct 여부를확인해 1 bit 부분의 비트를 정해서 병합 후 해당 LC자리에 입력.
-
-                3. NON-MRI 코드인지 확인.
-                3-1 맞다면 매칭되는 바이너리 코드를 입력
-
-                4. 아니라면, 해독할 수 없는 명령어 이므로 오류 출력.
-         */
     public void parseSecondPass(List<String> program) throws UnknownInstructionException {
         resetLc();
 
@@ -133,17 +113,17 @@ public class Assembler {
         } else {
 
             // DEC, HEX 일시 데이터 입력
-            for (Label label : addressLabelTable) {
-                if (label.getLc() == lc) {
-                    binaryInstruction.add(label.getData());
-                    break;
-                }
-            }
-        }
+            Label label = addressLabelTable.stream()
+                    .filter(l -> l.getLc() == lc)
+                    .findAny().get();
 
-//        if (symbol.equals("DEC"))
+            binaryInstruction.add(label.getData());
+        }
+//        else if (symbol.equals("DEC"))
 //        } else if (symbol.equals("HEC")) {
 //        }
+// 함수 분리하기
+// 2진수 변환 코드 삽입
     }
 
     private void executeNonPseudoCommand(List<String> args) throws IllegalArgumentException {
@@ -151,12 +131,13 @@ public class Assembler {
         Instruction instruction = Instruction.valueOf(symbol);
         int instructionHexCode = instruction.getHexaCode();
         if (args.size() > 1) {
-            String labelName = args.get(1);
-            // no getData ??
-            instructionHexCode += addressLabelTable.stream().filter(label -> label.getName().equals(labelName)).collect(Collectors.toList()).get(0).getLc();
+            String label = args.get(1);
+            instructionHexCode += addressLabelTable.stream()
+                    .filter(l -> l.getName().equals(label))
+                    .findAny().get()
+                    .getLc();
         }
 
         binaryInstruction.add(instructionHexCode);
-
     }
 }
