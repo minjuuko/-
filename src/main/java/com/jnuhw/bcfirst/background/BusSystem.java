@@ -74,16 +74,16 @@ public class BusSystem {
         busSystem.get(type).setData(popedData);
     }
 
-    
+
     /*
-        void insertMemory
-        args:
-            @nullable key : Memory의 몇번째 Key에 입력할지 정함. 기본값은 0으로, method가 실행될 때 마다 1씩 상승
-            data : Memory에 입력될 data
             poped : data를 poped Data로 대체함.
      */
     public void setMemoryData(int address, int data) {
         memory.setMemoryData(address, data);
+    }
+
+    public int getMemoryData(int address) {
+        return memory.getMemoryData(address);
     }
     
     /*
@@ -93,16 +93,6 @@ public class BusSystem {
      */
     public void increaseRegister(RegisterType type){
         busSystem.get(type).increase();
-    }
-
-    
-    /*
-        void getMemoryData
-        args :
-            key : Memory의 데이터를 받아옴
-     */
-    public int getMemoryData(int key) {
-        return registers[key].getData();
     }
 
 
