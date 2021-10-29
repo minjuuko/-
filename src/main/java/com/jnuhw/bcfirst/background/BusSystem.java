@@ -82,18 +82,9 @@ public class BusSystem {
             data : Memory에 입력될 data
             poped : data를 poped Data로 대체함.
      */
-    public void insertMemory(int data) { // Memory에 데이터를 입력함.
-        insertMemory(memoryKey++, data, false);
+    public void setMemoryData(int address, int data) {
+        memory.setMemoryData(address, data);
     }
-
-    public void insertMemory(int key, int data, boolean poped) { // Memory에 데이터를 입력함. key를 입력하지 않을 경우
-        if(key < 4096) {
-            registers[key] = new Register();
-        }
-        registers[key].setData(poped ? popedData : data);
-    }
-
-
     
     /*
         void increaseRegister

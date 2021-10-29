@@ -12,7 +12,7 @@ public class LcCounter {
         this.lc = lc;
     }
 
-    public int getLc() {
+    public int getCurrentLc() {
         return lc;
     }
 

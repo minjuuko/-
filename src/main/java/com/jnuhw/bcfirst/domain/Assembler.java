@@ -65,7 +65,7 @@ public class Assembler {
         String label = args.get(0);
         int data = Integer.parseInt(args.get(2));
 
-        addressLabelTable.add(new Label(label, lcCounter.getLc(), data));
+        addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), data));
     }
 
     private void executeORG(int location) {
@@ -86,7 +86,7 @@ public class Assembler {
                 try {
                     executeNonPseudoCommand(args);
                 } catch (IllegalArgumentException e) {
-                    OutputView.printUnknownInstructionError(lcCounter.getLc(), command);
+                    OutputView.printUnknownInstructionError(lcCounter.getCurrentLc(), command);
                     throw new UnknownInstructionException();
                 }
             }
@@ -107,17 +107,20 @@ public class Assembler {
         } else {
 
             // DEC, HEX 일시 데이터 입력
-            Label label = addressLabelTable.stream()
-                    .filter(l -> l.getLc() == lcCounter.getLc())
-                    .findAny().get();
-
-            binaryInstruction.add(label.getData());
+            Label label = getLabelByCurrentLc();
+            busSystem.setMemoryData(lcCounter.getCurrentLc(), label.getData());
         }
 //        else if (symbol.equals("DEC"))
 //        } else if (symbol.equals("HEC")) {
 //        }
 // 함수 분리하기
 // 2진수 변환 코드 삽입
+    }
+
+    private Label getLabelByCurrentLc() {
+        return addressLabelTable.stream()
+                .filter(l -> l.getLc() == lcCounter.getCurrentLc())
+                .findAny().get();
     }
 
     private void executeNonPseudoCommand(List<String> args) throws IllegalArgumentException {

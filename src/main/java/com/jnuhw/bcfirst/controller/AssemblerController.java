@@ -70,7 +70,7 @@ public class AssemblerController {
             } else if (0x3000 <= data && data <= 0x3FFF) { // STA Command
                 address = data - 0x3000;
                 busSystem.popData(BusSystem.RegisterType.AC);
-                busSystem.insertMemory(address, 0, true); // 0은 아무 의미 없으며, popedData를 입력함
+//                busSystem.insertMemory(address, 0, true); // 0은 아무 의미 없으며, popedData를 입력함
             } else if (0x4000 <= data && data <= 0x4FFF) { // BUN Command
                 // Not use
             } else if (0x5000 <= data && data <= 0x5FFF) { // BSA Command
