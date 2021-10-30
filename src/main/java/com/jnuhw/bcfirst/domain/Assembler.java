@@ -18,10 +18,6 @@ public class Assembler {
 
     // 임시
 
-    /**
-     * Symbol 을 선언하는 명령어들을 읽어서, Symbol 객체 생성
-     * @param program
-     */
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
@@ -111,16 +107,11 @@ public class Assembler {
         }
 
         if(isLabelCommand(symbol)) {
-            Label label = getLabelByCurrentLc();
+            String labelName = args.get(0);
+            Label label = getLabelByName(labelName);
             // @deprecated
             BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), label.getData());
         }
-    }
-
-    private Label getLabelByCurrentLc() {
-        return addressLabelTable.stream()
-                .filter(l -> l.getLc() == lcCounter.getCurrentLc())
-                .findAny().get();
     }
 
     private void executeNonPseudoCommand(List<String> args) throws IllegalArgumentException {
@@ -128,11 +119,8 @@ public class Assembler {
         Instruction instruction = Instruction.valueOf(symbol);
         int instructionHexCode = instruction.getHexaCode();
         if (args.size() > 1) {
-            String label = args.get(1);
-            instructionHexCode += addressLabelTable.stream()
-                    .filter(l -> l.getName().equals(label))
-                    .findAny().get()
-                    .getLc();
+            String labelName = args.get(1);
+            instructionHexCode += getLabelByName(labelName).getLc();
         }
         if (args.get(args.size()-1).equals("I")) {
             instructionHexCode += 0x8000;
@@ -140,7 +128,11 @@ public class Assembler {
 
         // @deprecated
         BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), instructionHexCode);
-        //binaryInstruction.add(instructionHexCode);
     }
 
+    private Label getLabelByName(String name) {
+        return addressLabelTable.stream()
+                .filter(l -> l.getName().equals(name))
+                .findAny().get();
+    }
 }
