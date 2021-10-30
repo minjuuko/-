@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 public class BusSystem {
 
+    private static BusSystem instance;
+
     public enum RegisterType {
         AR, PC, DR, AC, IR, TR, INPR, OUTR, E
     }
@@ -19,65 +21,45 @@ public class BusSystem {
         AND, ADD
     }
 
-    private final HashMap<RegisterType, Register> busSystem; // Bus System Register
-    private final Register[] registers; // 4096개의 레지스터를 저장할 수 있는 32-bit Memory ( 16-bit로 구현 하고 싶었으나, Java의 short형으로는 불가능, unsigned short는 없음 )
-    private Memory memory = new Memory();
+    private final HashMap<RegisterType, Register> busSystem;
+    private final Memory memory = new Memory();
+    private int popedData;
+    private boolean E;
 
-    private int popedData; // bus System에 pop 되어있는 Data
-    private int memoryKey; // Memory의 0부터 되어지는 Key, 데이터가 Insert될때 1씩 늘어나며 아래서 부터 채움.
-    private boolean E; // E Data
-
-    public BusSystem() {
+    private BusSystem() {
         busSystem = new HashMap<>();
-        registers = new Register[4096]; //
         popedData = 0;
-        memoryKey = 0;
 
-        for(RegisterType type : RegisterType.values()) { // bus System Regsiter 초기값 SET
+        for(RegisterType type : RegisterType.values()) {
             if(type == RegisterType.E) continue;
             busSystem.put(type, new Register());
         }
     }
 
+    public static BusSystem getInstance() {
+        if (instance == null) {
+            instance = new BusSystem();
+        }
 
-    /*
-        void popData
-        args :
-            type, key : 어떤 데이터를 Bus System에 pop할 지 결정한다.
-     */
+        return instance;
+    }
+
     public void popData(int key) {
-        popedData = registers[key].getData();
+        popedData = memory.getMemoryData(key);
     }
 
     public void popData(RegisterType type) {
         popedData = busSystem.get(type).getData();
     }
 
-
-    /*
-        void getOutData
-        args :
-            type : 어떤 레지스터의 데이터를 가져올지 결정함
-     */
     public int getOutData(RegisterType type) {
         return busSystem.get(type).getData();
     }
 
-    
-    /*
-        void setData
-        args :
-            type : 어떤 레지스터의 데이터 값을 설정할지 결정
-        description : 입력되는 데이터는 poped된 데이터만 가능
-     */
     public void setData(RegisterType type) {
         busSystem.get(type).setData(popedData);
     }
 
-
-    /*
-            poped : data를 poped Data로 대체함.
-     */
     public void setMemoryData(int address, int data) {
         memory.setMemoryData(address, data);
     }
@@ -85,25 +67,11 @@ public class BusSystem {
     public int getMemoryData(int address) {
         return memory.getMemoryData(address);
     }
-    
-    /*
-        void increaseRegister
-        args :
-            type : 어떤 레지스터에 INR 신호를 줄지 결정
-     */
+
     public void increaseRegister(RegisterType type){
         busSystem.get(type).increase();
     }
 
-
-    /*
-        void useAdder
-        args :
-            type : AND 인지 ADD인지
-            dr : DR의 데이터를 계산할 것인가?
-            ac : AC의 데이터를 계산할 것인가?
-            inpr : INPR의 데이터를 계산할 것인가?
-     */
     public void useAdder(CalculationType type, boolean dr, boolean ac, boolean inpr) {
         int data = 0x0000;
 

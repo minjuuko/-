@@ -10,13 +10,13 @@ public class Assembler {
 
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
-    private List<Integer> binaryInstruction = new ArrayList<>();
+    // private List<Integer> binaryInstruction = new ArrayList<>();
 
-    private int startLC;
-    private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
+    // private int startLC;
+    // private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
+    private List<Integer> startLcList = new ArrayList<>();
 
     // 임시
-    private BusSystem busSystem = new BusSystem();
 
     /**
      * Symbol 을 선언하는 명령어들을 읽어서, Symbol 객체 생성
@@ -31,8 +31,10 @@ public class Assembler {
                 addSymbolTable(args);
             }
 
-            if(symbol.equals("ORG"))
+            if(symbol.equals("ORG")) {
                 executeORG(Integer.parseInt(args.get(1)));
+                continue;
+            }
 
             lcCounter.increaseLc();
         }
@@ -69,7 +71,7 @@ public class Assembler {
 
 
     private void executeORG(int location) {
-        startLC = location;
+        startLcList.add(location);
         lcCounter.setLc(location);
     }
 
@@ -82,6 +84,7 @@ public class Assembler {
 
             if (isPseudoCommand(symbol)) {
                 executePseudoCommand(args);
+                if(symbol.equals("ORG")) continue;
             } else {
                 try {
                     executeNonPseudoCommand(args);
@@ -100,8 +103,6 @@ public class Assembler {
 
         switch(symbol) {
             case "END":
-                instructionsMap.put(startLC, binaryInstruction);
-                binaryInstruction = new ArrayList<>();
                 return;
             case "ORG":
                 executeORG(Integer.parseInt(args.get(1)));
@@ -111,7 +112,8 @@ public class Assembler {
 
         if(isLabelCommand(symbol)) {
             Label label = getLabelByCurrentLc();
-            busSystem.setMemoryData(lcCounter.getCurrentLc(), label.getData());
+            // @deprecated
+            BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), label.getData());
         }
     }
 
@@ -136,6 +138,9 @@ public class Assembler {
             instructionHexCode += 0x8000;
         }
 
-        binaryInstruction.add(instructionHexCode);
+        // @deprecated
+        BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), instructionHexCode);
+        //binaryInstruction.add(instructionHexCode);
     }
+
 }

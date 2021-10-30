@@ -10,7 +10,6 @@ import java.util.List;
 public class AssemblerController {
 
     Assembler assembler = new Assembler();
-    BusSystem busSystem = new BusSystem();
 
     /*
         void compile
@@ -44,6 +43,7 @@ public class AssemblerController {
      */
     public void execute() {
         boolean processing = true; // processing이 false가 될 때까지 무한으로 반복한다.
+        BusSystem busSystem = BusSystem.getInstance();
 
         // System.out.println("Code Execute");
         while(processing) {
@@ -91,6 +91,6 @@ public class AssemblerController {
     }
 
     public void printMemoryByAddress(int address) {
-        OutputView.printMemory(address, busSystem.getMemoryData(address));
+        OutputView.printMemory(address, BusSystem.getInstance().getMemoryData(address));
     }
 }
