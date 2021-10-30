@@ -122,9 +122,8 @@ public class Assembler {
         Instruction instruction = Instruction.valueOf(args.get(0));
         instruction.setIsInDirect(isIndirect);
         int instructionHexCode = instruction.getHexaCode();
-        if (args.size() > 1) {
-            String labelName = args.get(1);
-            instructionHexCode += getLabelByName(labelName).getLc();
+        if (instruction.isMri()) {
+            instructionHexCode += getLabelByName(args.get(1)).getData();
         }
 
         // @deprecated
