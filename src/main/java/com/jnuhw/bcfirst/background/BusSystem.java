@@ -5,6 +5,7 @@ package com.jnuhw.bcfirst.background;
  * BusSystem 설계는 확정되지 않았기 때문에, 대부분의 코드가 변경될 예정입니다.
  */
 
+import com.jnuhw.bcfirst.domain.BitData;
 import com.jnuhw.bcfirst.domain.Memory;
 
 import java.util.HashMap;
@@ -13,27 +14,41 @@ public class BusSystem {
 
     private static BusSystem instance;
 
-    public enum RegisterType {
-        AR, PC, DR, AC, IR, TR, INPR, OUTR, E
+    public interface BusPart {}
+
+    public enum RegisterType implements BusPart {
+        AR(12), PC(12), DR(16), AC(16), IR(16), TR(16), OUTR(8), INPR(8), SC(4); // SC는 임의의 Size 부여, 책에서 못찾음.
+
+        int bitSize;
+
+        RegisterType(int size) {
+            bitSize = size;
+        }
+    }
+
+    public enum FlipFlopType implements BusPart {
+        I, S, E, R, IEN, FGI, FGO
     }
 
     public enum CalculationType {
         AND, ADD
     }
 
-    private final HashMap<RegisterType, Register> busSystem;
+    private final HashMap<BusPart, BitData> busSystem;
     private final Memory memory = new Memory();
     private int popedData;
-    private boolean E;
 
     private BusSystem() {
         busSystem = new HashMap<>();
         popedData = 0;
 
-        for(RegisterType type : RegisterType.values()) {
-            if(type == RegisterType.E) continue;
-            busSystem.put(type, new Register());
+        for(RegisterType registerType : RegisterType.values()) {
+            busSystem.put(registerType, new BitData(registerType.bitSize));
         }
+        for(FlipFlopType flipFlopType : FlipFlopType.values()) {
+            busSystem.put(flipFlopType, new BitData(1));
+        }
+
     }
 
     public static BusSystem getInstance() {
@@ -92,7 +107,7 @@ public class BusSystem {
                 if (inpr) data += busSystem.get(RegisterType.INPR).getData();
 
                 while (data > 0xFFFF) {
-                    E = !E;
+                    busSystem.get(FlipFlopType.E).setData(busSystem.get(FlipFlopType.E).getData() == 0 ? 1 : 0);
                     data -= 0xFFFF;
                 }
                 break;
