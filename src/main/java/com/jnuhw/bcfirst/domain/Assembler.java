@@ -10,7 +10,6 @@ public class Assembler {
 
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
-    // private List<Integer> binaryInstruction = new ArrayList<>();
 
     // private int startLC;
     // private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
@@ -115,14 +114,17 @@ public class Assembler {
     }
 
     private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
+        boolean isIndirect = false;
+        if (args.get(args.size() - 1).equals("I")) {
+            isIndirect = true;
+        }
+
         Instruction instruction = Instruction.valueOf(args.get(0));
+        instruction.setIsInDirect(isIndirect);
         int instructionHexCode = instruction.getHexaCode();
         if (args.size() > 1) {
             String labelName = args.get(1);
             instructionHexCode += getLabelByName(labelName).getLc();
-        }
-        if (args.get(args.size() - 1).equals("I")) {
-            instructionHexCode += 0x8000;
         }
 
         // @deprecated
