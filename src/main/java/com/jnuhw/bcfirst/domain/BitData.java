@@ -22,14 +22,7 @@ public class BitData {
     }
 
     public void setData(int data) {
-        int bitRange = bitSize;
-        if (isSigned) {
-            bitRange--;
-        }
-
-        int minRange = -(int) Math.pow(2, bitRange);
-        int maxRange = (int) Math.pow(2, bitRange) - 1;
-        if (data < minRange || maxRange < data) {
+        if (checkOverflow(data)) {
             OutputView.printDataOverflowError(data);
             return;
         }
@@ -39,5 +32,26 @@ public class BitData {
 
     public int getData() {
         return data;
+    }
+
+    public void increase() {
+        if (checkOverflow(data)) {
+            OutputView.printDataOverflowError(data);
+            return;
+        }
+
+        data++;
+    }
+
+    public void clear() {
+        data = 0;
+    }
+
+    private boolean checkOverflow(int data) {
+        int bitRange = isSigned ? bitSize-1 : bitSize;
+//        int minRange = isSigned ? -(int) Math.pow(2, bitRange) : 0;
+//        int maxRange = (int) Math.pow(2, bitRange) - 1;
+
+        return Math.abs(data) > (Math.pow(2, bitRange)-1);
     }
 }
