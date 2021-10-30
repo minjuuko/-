@@ -4,15 +4,16 @@ import com.jnuhw.bcfirst.UnknownInstructionException;
 import com.jnuhw.bcfirst.background.BusSystem;
 import com.jnuhw.bcfirst.view.OutputView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Assembler {
 
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
     private List<Integer> binaryInstruction = new ArrayList<>();
+
+    private int startLC;
+    private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
 
     // 임시
     private BusSystem busSystem = new BusSystem();
@@ -25,32 +26,29 @@ public class Assembler {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String symbol = args.get(0);
-            if (!isPseudoCommand(symbol) && !isLabelCommand(symbol)) {
-                continue;
-            }
 
             if (isLabelCommand(symbol)) {
-                executeDEC(args);
+                addSymbolTable(args);
             }
 
-            String arg = args.get(1);
-            if (symbol.equals("ORG")) {
-                executeORG(Integer.parseInt(arg));
-
-            } else if (symbol.equals("END")) {
-                break;
-            }
+            if(symbol.equals("ORG"))
+                executeORG(Integer.parseInt(args.get(1)));
 
             lcCounter.increaseLc();
         }
     }
 
     private boolean isPseudoCommand(String command) {
-        if (command.equals("ORG") || command.equals("END") || command.equals("DEC") || command.equals("HEX")) {
-            return true;
-        }
+        switch(command.toUpperCase(Locale.ROOT)) {
+            case "ORG":
+            case "END":
+            case "DEC":
+            case "HEX":
+                return true;
 
-        return false;
+            default:
+                return false;
+        }
     }
 
     private boolean isLabelCommand(String command) {
@@ -61,14 +59,17 @@ public class Assembler {
         return false;
     }
 
-    private void executeDEC(List<String> args) {
+    private void addSymbolTable(List<String> args) {
         String label = args.get(0);
-        int data = Integer.parseInt(args.get(2));
+        label = label.substring(0, label.length()-1);
+        String data = args.get(2);
 
-        addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), data));
+        addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), args.get(1).equals("HEX") ? Integer.parseInt(data, 16) : Integer.parseInt(data)));
     }
 
+
     private void executeORG(int location) {
+        startLC = location;
         lcCounter.setLc(location);
     }
 
@@ -77,11 +78,10 @@ public class Assembler {
 
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
-            String symbol = args.get(0);
+            String symbol = isLabelCommand(args.get(0)) ? args.get(1) : args.get(0);
 
             if (isPseudoCommand(symbol)) {
                 executePseudoCommand(args);
-                return;
             } else {
                 try {
                     executeNonPseudoCommand(args);
@@ -97,24 +97,22 @@ public class Assembler {
 
     private void executePseudoCommand(List<String> args) {
         String symbol = args.get(0);
-        if (symbol.equals("END")) {
-            return;
+
+        switch(symbol) {
+            case "END":
+                instructionsMap.put(startLC, binaryInstruction);
+                binaryInstruction = new ArrayList<>();
+                return;
+            case "ORG":
+                executeORG(Integer.parseInt(args.get(1)));
+                return;
+
         }
 
-        int arg = Integer.parseInt(args.get(1));
-        if (symbol.equals("ORG")) {
-            executeORG(arg);
-        } else {
-
-            // DEC, HEX 일시 데이터 입력
+        if(isLabelCommand(symbol)) {
             Label label = getLabelByCurrentLc();
             busSystem.setMemoryData(lcCounter.getCurrentLc(), label.getData());
         }
-//        else if (symbol.equals("DEC"))
-//        } else if (symbol.equals("HEC")) {
-//        }
-// 함수 분리하기
-// 2진수 변환 코드 삽입
     }
 
     private Label getLabelByCurrentLc() {
@@ -133,6 +131,9 @@ public class Assembler {
                     .filter(l -> l.getName().equals(label))
                     .findAny().get()
                     .getLc();
+        }
+        if (args.get(args.size()-1).equals("I")) {
+            instructionHexCode += 0x8000;
         }
 
         binaryInstruction.add(instructionHexCode);
