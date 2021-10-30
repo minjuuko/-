@@ -21,12 +21,7 @@ public class BitData {
     }
 
     public void setData(int data) {
-        if (isSigned && checkSignedOverflow(data)) {
-            OutputView.printDataOverflowError(data);
-            return;
-        }
-        if (!isSigned && checkUnsignedOverflow(data)) {
-            OutputView.printDataOverflowError(data);
+        if (checkOverflow(data)) {
             return;
         }
 
@@ -38,12 +33,7 @@ public class BitData {
     }
 
     public void increase() {
-        if (isSigned && checkSignedOverflow(data + 1)) {
-            OutputView.printDataOverflowError(data + 1);
-            return;
-        }
-        if (!isSigned && checkUnsignedOverflow(data + 1)) {
-            OutputView.printDataOverflowError(data + 1);
+        if (checkOverflow(data + 1)) {
             return;
         }
 
@@ -54,36 +44,41 @@ public class BitData {
         data = 0;
     }
 
-    private boolean checkSignedOverflow(int newData) {
+    private boolean checkOverflow(int value) {
+        if (isSigned && checkSignedOverflow(data + 1)) {
+            OutputView.printDataOverflowError(data + 1);
+            return false;
+        }
+        if (!isSigned && checkUnsignedOverflow(data + 1)) {
+            OutputView.printDataOverflowError(data + 1);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkSignedOverflow(int value) {
         int bitRange = bitSize - 1;
         int minRange = -(int) Math.pow(2, bitRange);
         int maxRange = (int) Math.pow(2, bitRange) - 1;
 
-        if (newData < minRange || maxRange < newData) {
-            OutputView.printDataOverflowError(newData);
+        if (value < minRange || maxRange < value) {
+            OutputView.printDataOverflowError(value);
             return false;
         }
 
         return true;
     }
 
-    private boolean checkUnsignedOverflow(int newData) {
+    private boolean checkUnsignedOverflow(int value) {
         int bitRange = bitSize;
         int maxRange = (int) Math.pow(2, bitRange) - 1;
 
-        if (newData < 0 || maxRange < newData) {
-            OutputView.printDataOverflowError(newData);
+        if (value < 0 || maxRange < value) {
+            OutputView.printDataOverflowError(value);
             return false;
         }
 
         return true;
     }
-
-//    private boolean checkOverflow(int data) {
-//        int bitRange = isSigned ? bitSize-1 : bitSize;
-////        int minRange = isSigned ? -(int) Math.pow(2, bitRange) : 0;
-////        int maxRange = (int) Math.pow(2, bitRange) - 1;
-//
-//        return Math.abs(data) > (Math.pow(2, bitRange)-1);
-//    }
 }
