@@ -22,12 +22,15 @@ public enum Instruction {
     SZA(0x7004, false),
     SZE(0x7002, false),
     HLT(0x7001, false),
+
     INP(0xF800, false),
     OUT(0xF400, false),
     SKI(0xF200, false),
     SKO(0xF100, false),
     ION(0xF080, false),
     IOF(0xF040, false);
+
+    public static int INDIRECT_CODE = 0x8000;
 
     private int hexaCode;
     private boolean isMri;
@@ -45,7 +48,7 @@ public enum Instruction {
 
     public int getHexaCode() {
         if (isInDirect) {
-            return hexaCode + 0x8000;
+            return hexaCode + INDIRECT_CODE;
         }
 
         return hexaCode;
@@ -53,5 +56,43 @@ public enum Instruction {
 
     public boolean isMri() {
         return isMri;
+    }
+
+    public static boolean isMriHexCode(int hexaCode) {
+        if (AND.hexaCode <= hexaCode && hexaCode < HLT.hexaCode) {
+            return true;
+        }
+
+        if (AND.hexaCode + INDIRECT_CODE <= hexaCode && hexaCode < HLT.hexaCode + INDIRECT_CODE) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isIndirectHexaCode(int hexaCode) {
+        if (AND.hexaCode + INDIRECT_CODE <= hexaCode && hexaCode < HLT.hexaCode + INDIRECT_CODE) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 데이터 주소가 섞여있는 MRI Instruction hexa code를 Instruction 판별용 hexa code로 변환함.
+     * @param memoryHexaCode
+     * @return MRI Instruction Hexa Code
+     */
+    public static int getInstructionHexaCodeFromMemoryHexaCode(int memoryHexaCode) {
+        return memoryHexaCode - memoryHexaCode % 0x1000;
+    }
+
+    /**
+     * 데이터 주소가 섞여있는 MRI Instruction hexa code를 Instruction 판별용 hexa code로 변환함.
+     * @param memoryHexaCode
+     * @return MRI Instruction Hexa Code
+     */
+    public static int getDataHexaCodeFromMemoryHexaCode(int memoryHexaCode) {
+        return memoryHexaCode % 0x1000;
     }
 }
