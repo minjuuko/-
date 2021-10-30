@@ -21,13 +21,13 @@ public class Assembler {
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
-            String symbol = args.get(0);
+            String instruction = args.get(0);
 
-            if (isLabelCommand(symbol)) {
+            if (isLabelInstruction(instruction)) {
                 addSymbolTable(args);
             }
 
-            if(symbol.equals("ORG")) {
+            if (instruction.equals("ORG")) {
                 executeORG(Integer.parseInt(args.get(1)));
                 continue;
             }
@@ -36,8 +36,8 @@ public class Assembler {
         }
     }
 
-    private boolean isPseudoCommand(String command) {
-        switch(command.toUpperCase(Locale.ROOT)) {
+    private boolean isPseudoInstruction(String instruction) {
+        switch (instruction.toUpperCase(Locale.ROOT)) {
             case "ORG":
             case "END":
             case "DEC":
@@ -49,7 +49,7 @@ public class Assembler {
         }
     }
 
-    private boolean isLabelCommand(String command) {
+    private boolean isLabelInstruction(String command) {
         if (command.contains(",")) {
             return true;
         }
@@ -59,7 +59,7 @@ public class Assembler {
 
     private void addSymbolTable(List<String> args) {
         String label = args.get(0);
-        label = label.substring(0, label.length()-1);
+        label = label.substring(0, label.length() - 1);
         String data = args.get(2);
 
         addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), args.get(1).equals("HEX") ? Integer.parseInt(data, 16) : Integer.parseInt(data)));
@@ -76,14 +76,14 @@ public class Assembler {
 
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
-            String symbol = isLabelCommand(args.get(0)) ? args.get(1) : args.get(0);
+            String instruction = isLabelInstruction(args.get(0)) ? args.get(1) : args.get(0);
 
-            if (isPseudoCommand(symbol)) {
-                executePseudoCommand(args);
-                if(symbol.equals("ORG")) continue;
+            if (isPseudoInstruction(instruction)) {
+                executePseudoInstruction(args);
+                if (instruction.equals("ORG")) continue;
             } else {
                 try {
-                    executeNonPseudoCommand(args);
+                    executeNonPseudoInstruction(args);
                 } catch (IllegalArgumentException e) {
                     OutputView.printUnknownInstructionError(lcCounter.getCurrentLc(), command);
                     throw new UnknownInstructionException();
@@ -94,10 +94,10 @@ public class Assembler {
         }
     }
 
-    private void executePseudoCommand(List<String> args) {
-        String symbol = args.get(0);
+    private void executePseudoInstruction(List<String> args) {
+        String instruction = args.get(0);
 
-        switch(symbol) {
+        switch (instruction) {
             case "END":
                 return;
             case "ORG":
@@ -106,7 +106,7 @@ public class Assembler {
 
         }
 
-        if(isLabelCommand(symbol)) {
+        if (isLabelInstruction(instruction)) {
             String labelName = args.get(0);
             Label label = getLabelByName(labelName);
             // @deprecated
@@ -114,15 +114,14 @@ public class Assembler {
         }
     }
 
-    private void executeNonPseudoCommand(List<String> args) throws IllegalArgumentException {
-        String symbol = args.get(0);
-        Instruction instruction = Instruction.valueOf(symbol);
+    private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
+        Instruction instruction = Instruction.valueOf(args.get(0));
         int instructionHexCode = instruction.getHexaCode();
         if (args.size() > 1) {
             String labelName = args.get(1);
             instructionHexCode += getLabelByName(labelName).getLc();
         }
-        if (args.get(args.size()-1).equals("I")) {
+        if (args.get(args.size() - 1).equals("I")) {
             instructionHexCode += 0x8000;
         }
 
