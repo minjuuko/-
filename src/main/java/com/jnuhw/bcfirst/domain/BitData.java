@@ -10,13 +10,19 @@ public class BitData {
     // 데이터는 2진수로 관리되고, 계산되어야 함;
     private int data = 0;
 
+    public BitData(int bitSize) {
+        this.bitSize = bitSize;
+        isSigned = false;
+    }
+
+    @Deprecated
     public BitData(int bitSize, boolean isSigned) {
         this.bitSize = bitSize;
         this.isSigned = isSigned;
     }
 
     public void setData(int data) {
-        int bitRange = bitSize-1;
+        int bitRange = bitSize;
         if (isSigned) {
             bitRange--;
         }
