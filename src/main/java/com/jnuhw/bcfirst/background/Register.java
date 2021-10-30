@@ -1,12 +1,6 @@
 package com.jnuhw.bcfirst.background;
 
-/*
-    Register
-    variables:
-        data : 레지스터가 보유하고 있는 데이터
-    
- */
-
+@Deprecated
 public class Register {
 
     private int data;
