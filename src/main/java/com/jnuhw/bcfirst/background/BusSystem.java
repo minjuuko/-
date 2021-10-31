@@ -75,6 +75,10 @@ public class BusSystem {
         busSystem.get(type).setData(popedData);
     }
 
+    public void initializeMemoryData(int address, boolean isNumeralData, int data) {
+        memory.initializeMemoryData(address, isNumeralData, data);
+    }
+
     public void setMemoryData(int address, int data) {
         memory.setMemoryData(address, data);
     }

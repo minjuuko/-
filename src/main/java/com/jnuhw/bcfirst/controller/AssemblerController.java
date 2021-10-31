@@ -13,11 +13,6 @@ public class AssemblerController {
     Assembler assembler = new Assembler();
     Executor executor = new Executor();
 
-    /*
-        void compile
-        args:
-        description: FIRST PASS와 SECOND PASS를 실행 한 후, byte command 형태로 변환된 코드를 Memory에 입력함.
-     */
     public void run(List<String> program) {
         try {
             assembler.parseFirstPass(program);

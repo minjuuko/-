@@ -109,7 +109,7 @@ public class Assembler {
             String labelName = args.get(0);
             Label label = getLabelByName(labelName);
             // @deprecated
-            BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), label.getData());
+            BusSystem.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
         }
     }
 
@@ -127,7 +127,7 @@ public class Assembler {
         }
 
         // @deprecated
-        BusSystem.getInstance().setMemoryData(lcCounter.getCurrentLc(), instructionHexCode);
+        BusSystem.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }
 
     private Label getLabelByName(String name) {
