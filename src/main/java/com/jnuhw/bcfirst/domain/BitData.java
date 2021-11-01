@@ -49,11 +49,11 @@ public class BitData {
     }
 
     private boolean checkOverflow(int value) {
-        if (isSigned && checkSignedOverflow(value)) {
+        if (isSigned && !checkSignedOverflow(value)) {
             return false;
         }
 
-        if (!isSigned && checkUnsignedOverflow(value)) {
+        if (!isSigned && !checkUnsignedOverflow(value)) {
             return false;
         }
 
@@ -67,10 +67,10 @@ public class BitData {
 
         if (value < minRange || maxRange < value) {
             OutputView.printDataOverflowError(value);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean checkUnsignedOverflow(int value) {
@@ -79,9 +79,9 @@ public class BitData {
 
         if (value < 0 || maxRange < value) {
             OutputView.printDataOverflowError(value);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
