@@ -123,7 +123,7 @@ public class Assembler {
 
     private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
         boolean isIndirect = false;
-        if (args.get(args.size() - 1).equals("I")) {
+        if (args.size() == 3 && args.get(2).equals("I")) {
             isIndirect = true;
         }
 
