@@ -10,14 +10,15 @@ public class Assembler {
 
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
+    private boolean isFirstPass;
 
     // private int startLC;
     // private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
-    private List<Integer> startLcList = new ArrayList<>();
 
     // 임시
 
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
+        isFirstPass = true;
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
@@ -33,6 +34,7 @@ public class Assembler {
 
             lcCounter.increaseLc();
         }
+        isFirstPass = false;
     }
 
     private boolean isPseudoInstruction(String instruction) {
@@ -71,7 +73,9 @@ public class Assembler {
 
 
     private void executeORG(int location) {
-        startLcList.add(location);
+        if(isFirstPass)
+            Executor.getInstance().addStartLCData(location);
+
         lcCounter.setLc(location);
     }
 

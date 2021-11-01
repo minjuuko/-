@@ -2,26 +2,39 @@ package com.jnuhw.bcfirst.domain;
 
 import com.jnuhw.bcfirst.background.BusSystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Executor {
+
+    private static Executor instance;
+    private List<Integer> startLcList = new ArrayList<>();
+
+    public static Executor getInstance() {
+        if(instance == null)
+            instance = new Executor();
+
+        return instance;
+    }
 
     public void execute() {
         BusSystem busSystem = BusSystem.getInstance();
 
         // System.out.println("Code Execute");
         int pc = 0;
-        while (pc < Memory.MEMORY_SIZE) {
+        boolean programEnd = false;
+        while (pc < Memory.MEMORY_SIZE && !programEnd) {
             pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
             int memoryData = busSystem.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
             int instructionIdentifier = memoryData;
             boolean isMri = Instruction.isMriHexCode(instructionIdentifier);
             boolean isInDirect = Instruction.isIndirectHexaCode(instructionIdentifier);
-            int oprand;
+            int operand;
             if (isMri) {
                 instructionIdentifier = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
                 int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                oprand = busSystem.getMemoryData(oprandAddress);
+                operand = busSystem.getMemoryData(oprandAddress);
             }
 
             int finalInstructionIdentifier = instructionIdentifier;
@@ -81,6 +94,9 @@ public class Executor {
                     break;
                 case SZA:
                     executeSZA();
+                    break;
+                case HLT:
+                    programEnd = true;
                     break;
 
                 // IO Instruction
@@ -203,5 +219,13 @@ public class Executor {
 
     private void executeIOF() {
 
+    }
+
+    public void addStartLCData(int lc) {
+        startLcList.add(lc);
+    }
+
+    public List<Integer> getStartLcData() {
+        return startLcList;
     }
 }

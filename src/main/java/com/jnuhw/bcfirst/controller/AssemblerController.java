@@ -11,7 +11,7 @@ import java.util.List;
 public class AssemblerController {
 
     Assembler assembler = new Assembler();
-    Executor executor = new Executor();
+    Executor executor = Executor.getInstance();
 
     public void run(List<String> program) {
         try {
