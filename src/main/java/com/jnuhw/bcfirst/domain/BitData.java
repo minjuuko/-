@@ -49,12 +49,11 @@ public class BitData {
     }
 
     private boolean checkOverflow(int value) {
-        if (isSigned && checkSignedOverflow(data + 1)) {
-            OutputView.printDataOverflowError(data + 1);
+        if (isSigned && checkSignedOverflow(value)) {
             return false;
         }
-        if (!isSigned && checkUnsignedOverflow(data + 1)) {
-            OutputView.printDataOverflowError(data + 1);
+
+        if (!isSigned && checkUnsignedOverflow(value)) {
             return false;
         }
 
