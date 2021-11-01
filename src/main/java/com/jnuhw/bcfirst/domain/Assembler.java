@@ -61,8 +61,13 @@ public class Assembler {
         label = label.substring(0, label.length() - 1);
         String data = args.get(2);
 
-        addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), args.get(1).equals("HEX") ? Integer.parseInt(data, 16) : Integer.parseInt(data)));
+        if (args.get(1).equals("HEX"))
+            addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
+        else
+            addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
+
     }
+
 
 
     private void executeORG(int location) {
@@ -75,7 +80,10 @@ public class Assembler {
 
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
-            String instruction = isLabelInstruction(args.get(0)) ? args.get(1) : args.get(0);
+            String instruction = args.get(0);
+
+            if(isLabelInstruction(instruction))
+                instruction = args.get(1);
 
             if (isPseudoInstruction(instruction)) {
                 executePseudoInstruction(args);
@@ -106,7 +114,7 @@ public class Assembler {
         }
 
         if (isLabelInstruction(instruction)) {
-            String labelName = args.get(0);
+            String labelName = instruction.substring(0, instruction.length()-1);
             Label label = getLabelByName(labelName);
             // @deprecated
             BusSystem.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
@@ -123,7 +131,7 @@ public class Assembler {
         instruction.setIsInDirect(isIndirect);
         int instructionHexCode = instruction.getHexaCode();
         if (instruction.isMri()) {
-            instructionHexCode += getLabelByName(args.get(1)).getData();
+            instructionHexCode += getLabelByName(args.get(1)).getLc();
         }
 
         // @deprecated
