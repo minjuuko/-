@@ -51,11 +51,7 @@ public class Assembler {
     }
 
     private boolean isLabelInstruction(String command) {
-        if (command.contains(",")) {
-            return true;
-        }
-
-        return false;
+        return command.contains(",");
     }
 
     private void addSymbolTable(List<String> args) {
