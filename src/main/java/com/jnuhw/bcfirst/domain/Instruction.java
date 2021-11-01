@@ -30,10 +30,10 @@ public enum Instruction {
     ION(0xF080, false),
     IOF(0xF040, false);
 
-    public static int INDIRECT_CODE = 0x8000;
+    public static final int INDIRECT_CODE = 0x8000;
 
-    private int hexaCode;
-    private boolean isMri;
+    private final int hexaCode;
+    private final boolean isMri;
     private boolean isInDirect;
 
     Instruction(int hexaCode, boolean isMri) {
