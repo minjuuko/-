@@ -11,7 +11,7 @@ public class Application {
     public static void main(String[] args) {
 
         String[] addingTwoVariableProgram = new String[]{
-                "ORG 0",
+                "ORG 1",
                 "LDA A",
                 "ADD B",
                 "STA C",
