@@ -1,6 +1,7 @@
 package com.jnuhw.bcfirst.domain;
 
-import com.jnuhw.bcfirst.background.BusSystem;
+import com.jnuhw.bcfirst.background.CPUEngine;
+import com.jnuhw.bcfirst.background.RegisterType;
 
 import java.util.Arrays;
 
@@ -16,13 +17,13 @@ public class Executor {
     }
 
     public void execute(int startLc) {
-        BusSystem busSystem = BusSystem.getInstance();
+        CPUEngine engine = CPUEngine.getInstance();
 
         // System.out.println("Code Execute");
         int pc = startLc;
         while (pc < Memory.MEMORY_SIZE) {
 //            pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
-            int memoryData = busSystem.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
+            int memoryData = engine.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
 
             // Instruction Information
             int InstructionHexCode = memoryData;
@@ -32,7 +33,7 @@ public class Executor {
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
                 int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                operand = busSystem.getMemoryData(oprandAddress);
+                operand = engine.getMemoryData(oprandAddress);
             }
 
             int _instructionHexCode = InstructionHexCode;
@@ -122,7 +123,7 @@ public class Executor {
 
             // END 명령어 판별 필요?
 
-            busSystem.increaseRegister(BusSystem.RegisterType.PC);
+            engine.increaseRegister(RegisterType.PC);
         }
     }
 
