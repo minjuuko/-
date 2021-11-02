@@ -6,6 +6,7 @@ package com.jnuhw.bcfirst.background;
  */
 
 import com.jnuhw.bcfirst.domain.BitData;
+import com.jnuhw.bcfirst.domain.Instruction;
 import com.jnuhw.bcfirst.domain.Memory;
 
 import java.util.HashMap;
@@ -14,9 +15,6 @@ public class CPUEngine {
 
     private static CPUEngine instance;
 
-//    public enum CalculationType {
-//        AND, ADD
-//    }
 
     private final HashMap<RegisterType, BitData> registers;
     private final HashMap<FlipFlopType, BitData> flipflops;
@@ -44,37 +42,27 @@ public class CPUEngine {
         return instance;
     }
 
-//    public void useAdder(CalculationType type, boolean dr, boolean ac, boolean inpr) {
-//        int data = 0x0000;
-//
-//        switch(type) {
-//            case AND:
-//                if (dr) data = getRegisterData(RegisterType.DR);
-//                if (inpr){
-//                    if(dr) data = Integer.parseInt(Integer.toBinaryString(data & getRegisterData(RegisterType.INPR)), 2);
-//                    else data = getRegisterData(RegisterType.INPR);
-//                }
-//                if(ac) {
-//                    data = Integer.parseInt(Integer.toBinaryString(data & getRegisterData(RegisterType.AC)), 2);
-//                }
-//                break;
-//            case ADD:
-//                if (dr) data += getRegisterData(RegisterType.DR);
-//                if (ac) data += getRegisterData(RegisterType.AC);
-//                if (inpr) data += getRegisterData(RegisterType.INPR);
-//
-//                while (data > 0xFFFF) {
-//                    int eData = getFlipFlopData(FlipFlopType.E);
-//                    if(eData == 0) setFlipFlopData(FlipFlopType.E, 1);
-//                    else setFlipFlopData(FlipFlopType.E, 0);
-//
-//                    data -= 0xFFFF;
-//                }
-//                break;
-//        }
-//
-//        setRegisterData(RegisterType.AC, data);
-//    }
+    public void useALU(Instruction instruction) {
+        int drData = getRegisterData(RegisterType.DR);
+        int acData = getRegisterData(RegisterType.AC);
+        int result = 0;
+
+        switch(instruction) {
+            case AND:
+                result = Integer.parseInt(Integer.toBinaryString(drData & acData), 2);
+                break;
+            case ADD:
+                result = drData + acData;
+
+                if(result > 0xFFFF) {
+                    setFlipFlopData(FlipFlopType.E, 1);
+                    result -= 0xFFFF;
+                }
+                break;
+        }
+
+        setRegisterData(RegisterType.AC, result);
+    }
 
     public int getRegisterData(RegisterType type) {
         return registers.get(type).getData();

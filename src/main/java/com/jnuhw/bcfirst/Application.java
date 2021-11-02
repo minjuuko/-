@@ -19,7 +19,6 @@ public class Application {
                 "A, DEC 83",
                 "B, DEC -63",
                 "C, DEC 0",
-               // "XNA",
                 "END"
         }; // 6-5 Code
 

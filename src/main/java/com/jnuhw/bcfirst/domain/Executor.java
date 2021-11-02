@@ -20,20 +20,19 @@ public class Executor {
         CPUEngine engine = CPUEngine.getInstance();
         engine.setRegisterData(RegisterType.PC, startLc);
 
-        // System.out.println("Code Execute");
         while (true) {
-//            pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
             int memoryData = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
 
             // Instruction Information
             int InstructionHexCode = memoryData;
-            int operand;
+            int operand = 0;
             boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
             boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
-                int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                operand = engine.getMemoryData(oprandAddress);
+                // int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
+                // operand = engine.getMemoryData(oprandAddress);
+                operand = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
             }
 
             int _instructionHexCode = InstructionHexCode;
