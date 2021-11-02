@@ -9,7 +9,7 @@ import java.util.List;
 public class Executor {
 
     private static Executor instance;
-    private List<Integer> startLcList = new ArrayList<>();
+    private int startLcList = 0;
 
     public static Executor getInstance() {
         if(instance == null)
@@ -23,22 +23,23 @@ public class Executor {
 
         // System.out.println("Code Execute");
         int pc = 0;
-        boolean programEnd = false;
-        while (pc < Memory.MEMORY_SIZE && !programEnd) {
+        while (pc < Memory.MEMORY_SIZE ) {
             pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
             int memoryData = busSystem.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
-            int instructionIdentifier = memoryData;
-            boolean isMri = Instruction.isMriHexCode(instructionIdentifier);
-            boolean isInDirect = Instruction.isIndirectHexaCode(instructionIdentifier);
+
+            // Instruction Information
+            int InstructionHexCode = memoryData;
             int operand;
+            boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
+            boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
-                instructionIdentifier = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
+                InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
                 int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
                 operand = busSystem.getMemoryData(oprandAddress);
             }
 
-            int finalInstructionIdentifier = instructionIdentifier;
-            Instruction instruction = Arrays.stream(Instruction.values()).filter(i -> i.getHexaCode() == finalInstructionIdentifier).findAny().get();
+            int _instructionHexCode = InstructionHexCode;
+            Instruction instruction = Arrays.stream(Instruction.values()).filter(i -> i.getHexaCode() == _instructionHexCode).findAny().get();
             instruction.setIsInDirect(isInDirect);
             switch (instruction) {
                 // MRI Instruction
@@ -96,8 +97,7 @@ public class Executor {
                     executeSZA();
                     break;
                 case HLT:
-                    programEnd = true;
-                    break;
+                    return;
 
                 // IO Instruction
                 case INP:

@@ -12,11 +12,6 @@ public class Assembler {
     private List<Label> addressLabelTable = new ArrayList<>();
     private boolean isFirstPass;
 
-    // private int startLC;
-    // private HashMap<Integer, List<Integer>> instructionsMap = new HashMap<>();
-
-    // 임시
-
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
         isFirstPass = true;
         for (String command : program) {
