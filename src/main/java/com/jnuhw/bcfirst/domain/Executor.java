@@ -2,14 +2,11 @@ package com.jnuhw.bcfirst.domain;
 
 import com.jnuhw.bcfirst.background.BusSystem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Executor {
 
     private static Executor instance;
-    private int startLcList = 0;
 
     public static Executor getInstance() {
         if(instance == null)
@@ -18,13 +15,13 @@ public class Executor {
         return instance;
     }
 
-    public void execute() {
+    public void execute(int startLc) {
         BusSystem busSystem = BusSystem.getInstance();
 
         // System.out.println("Code Execute");
-        int pc = 0;
-        while (pc < Memory.MEMORY_SIZE ) {
-            pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
+        int pc = startLc;
+        while (pc < Memory.MEMORY_SIZE) {
+//            pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
             int memoryData = busSystem.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
 
             // Instruction Information
@@ -219,13 +216,5 @@ public class Executor {
 
     private void executeIOF() {
 
-    }
-
-    public void addStartLCData(int lc) {
-        startLcList.add(lc);
-    }
-
-    public List<Integer> getStartLcData() {
-        return startLcList;
     }
 }

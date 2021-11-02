@@ -17,7 +17,9 @@ public class AssemblerController {
         try {
             parser.parseFirstPass(program);
             parser.parseSecondPass(program);
-            executor.execute();
+
+            int startLc = parser.getStartLc(program.get(0));
+            executor.execute(startLc);
         } catch (UnknownInstructionException exception) {
             OutputView.printErrorAnnouncement();
         }
@@ -31,6 +33,7 @@ public class AssemblerController {
         printMemoryByAddress(0x0004);
         printMemoryByAddress(0x0005);
         printMemoryByAddress(0x0006);
+        printMemoryByAddress(0x0007);
         //
     }
 

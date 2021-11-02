@@ -10,10 +10,17 @@ public class Parser {
 
     private LcCounter lcCounter = new LcCounter();
     private List<Label> addressLabelTable = new ArrayList<>();
-    private boolean isFirstPass;
+
+    public int getStartLc(String firstLine) {
+        List<String> args = Arrays.asList(firstLine.split(" "));
+        if (args.get(0).toLowerCase(Locale.ROOT).equals("ORG")) {
+            return Integer.parseInt(args.get(1));
+        }
+
+        return 1;
+    }
 
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
-        isFirstPass = true;
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
@@ -29,7 +36,6 @@ public class Parser {
 
             lcCounter.increaseLc();
         }
-        isFirstPass = false;
     }
 
     private boolean isPseudoInstruction(String instruction) {
@@ -64,9 +70,6 @@ public class Parser {
 
 
     private void executeORG(int location) {
-        if(isFirstPass)
-            Executor.getInstance().addStartLCData(location);
-
         lcCounter.setLc(location);
     }
 
