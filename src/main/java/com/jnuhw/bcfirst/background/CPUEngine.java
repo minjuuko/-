@@ -14,8 +14,6 @@ public class CPUEngine {
 
     private static CPUEngine instance;
 
-    public interface BusPart {}
-
 //    public enum CalculationType {
 //        AND, ADD
 //    }
