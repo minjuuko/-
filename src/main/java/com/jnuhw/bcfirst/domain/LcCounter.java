@@ -2,10 +2,12 @@ package com.jnuhw.bcfirst.domain;
 
 public class LcCounter {
 
+    public static final int DEFAULT_LC = 1;
+
     private int lc;
 
     public LcCounter() {
-        this.lc = 0;
+        this.lc = DEFAULT_LC;
     }
 
     public void setLc(int lc) {
@@ -21,6 +23,6 @@ public class LcCounter {
     }
 
     public void resetLc() {
-        lc = 0;
+        lc = DEFAULT_LC;
     }
 }

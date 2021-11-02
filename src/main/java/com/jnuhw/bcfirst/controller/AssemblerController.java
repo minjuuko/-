@@ -2,7 +2,7 @@ package com.jnuhw.bcfirst.controller;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
 import com.jnuhw.bcfirst.background.BusSystem;
-import com.jnuhw.bcfirst.domain.Assembler;
+import com.jnuhw.bcfirst.domain.Parser;
 import com.jnuhw.bcfirst.domain.Executor;
 import com.jnuhw.bcfirst.view.OutputView;
 
@@ -10,13 +10,13 @@ import java.util.List;
 
 public class AssemblerController {
 
-    Assembler assembler = new Assembler();
+    Parser parser = new Parser();
     Executor executor = Executor.getInstance();
 
     public void run(List<String> program) {
         try {
-            assembler.parseFirstPass(program);
-            assembler.parseSecondPass(program);
+            parser.parseFirstPass(program);
+            parser.parseSecondPass(program);
             executor.execute();
         } catch (UnknownInstructionException exception) {
             OutputView.printErrorAnnouncement();
