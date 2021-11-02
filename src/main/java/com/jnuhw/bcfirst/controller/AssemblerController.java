@@ -1,7 +1,7 @@
 package com.jnuhw.bcfirst.controller;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.background.BusSystem;
+import com.jnuhw.bcfirst.background.CPUEngine;
 import com.jnuhw.bcfirst.domain.Parser;
 import com.jnuhw.bcfirst.domain.Executor;
 import com.jnuhw.bcfirst.view.OutputView;
@@ -38,6 +38,6 @@ public class AssemblerController {
     }
 
     public void printMemoryByAddress(int address) {
-        OutputView.printMemory(address, BusSystem.getInstance().getMemoryData(address));
+        OutputView.printMemory(address, CPUEngine.getInstance().getMemoryData(address));
     }
 }

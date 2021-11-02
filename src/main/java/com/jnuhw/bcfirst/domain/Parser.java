@@ -1,7 +1,7 @@
 package com.jnuhw.bcfirst.domain;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.background.BusSystem;
+import com.jnuhw.bcfirst.background.CPUEngine;
 import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.*;
@@ -115,7 +115,7 @@ public class Parser {
             String labelName = instruction.substring(0, instruction.length()-1);
             Label label = getLabelByName(labelName);
             // @deprecated
-            BusSystem.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
+            CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
         }
     }
 
@@ -133,7 +133,7 @@ public class Parser {
         }
 
         // @deprecated
-        BusSystem.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
+        CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }
 
     private Label getLabelByName(String name) {
