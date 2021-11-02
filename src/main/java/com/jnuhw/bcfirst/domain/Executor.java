@@ -18,12 +18,12 @@ public class Executor {
 
     public void execute(int startLc) {
         CPUEngine engine = CPUEngine.getInstance();
+        engine.setRegisterData(RegisterType.PC, startLc);
 
         // System.out.println("Code Execute");
-        int pc = startLc;
-        while (pc < Memory.MEMORY_SIZE) {
+        while (true) {
 //            pc = busSystem.getOutData(BusSystem.RegisterType.PC); // PC 레지스터의 데이터
-            int memoryData = engine.getMemoryData(pc); // M[PC]의 데이터 ( Instruction )
+            int memoryData = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
 
             // Instruction Information
             int InstructionHexCode = memoryData;
