@@ -88,6 +88,10 @@ public class CPUEngine {
         registers.get(type).increase();
     }
 
+    public void clearReigster(RegisterType type) {
+        registers.get(type).setData(0x0000);
+    }
+
     public int getFlipFlopData(FlipFlopType type) {
         return flipflops.get(type).getData();
     }
