@@ -1,13 +1,8 @@
-package com.jnuhw.bcfirst.background;
+package com.jnuhw.bcfirst.domain.Cpu;
 
-/**
- * @deprecated class
- * BusSystem 설계는 확정되지 않았기 때문에, 대부분의 코드가 변경될 예정입니다.
- */
-
-import com.jnuhw.bcfirst.domain.BitData;
-import com.jnuhw.bcfirst.domain.Instruction;
-import com.jnuhw.bcfirst.domain.Memory;
+import com.jnuhw.bcfirst.domain.Assembler.BitData;
+import com.jnuhw.bcfirst.domain.Assembler.Instruction;
+import com.jnuhw.bcfirst.domain.Assembler.Memory;
 
 import java.util.HashMap;
 
@@ -76,7 +71,7 @@ public class CPUEngine {
         registers.get(type).increase();
     }
 
-    public void clearReigster(RegisterType type) {
+    public void clearRegister(RegisterType type) {
         registers.get(type).setData(0x0000);
     }
 

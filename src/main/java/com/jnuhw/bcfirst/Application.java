@@ -1,7 +1,6 @@
 package com.jnuhw.bcfirst;
 
 import com.jnuhw.bcfirst.controller.AssemblerController;
-import com.jnuhw.bcfirst.domain.BitData;
 
 import java.util.*;
 

@@ -1,7 +1,7 @@
-package com.jnuhw.bcfirst.domain;
+package com.jnuhw.bcfirst.domain.Assembler;
 
-import com.jnuhw.bcfirst.background.CPUEngine;
-import com.jnuhw.bcfirst.background.RegisterType;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
 
 import java.util.Arrays;
 
@@ -127,7 +127,6 @@ public class Executor {
     }
 
     private void executeAND() {
-
     }
 
     private void executeADD() {
@@ -135,7 +134,6 @@ public class Executor {
     }
 
     private void executeLDA() {
-
     }
 
     private void executeSTA() {

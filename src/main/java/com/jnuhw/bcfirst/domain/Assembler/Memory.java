@@ -1,7 +1,6 @@
-package com.jnuhw.bcfirst.domain;
+package com.jnuhw.bcfirst.domain.Assembler;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Memory {
