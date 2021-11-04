@@ -142,16 +142,17 @@ public class Executor {
 
     }
 
-    private void executeBUN() {
+    private void executeBUN(int operand, boolean isIndirect) {
 
     }
 
-    private void executeBSA() {
+    private void executeBSA(int operand, boolean isIndirect) {
 
     }
 
-    private void executeISZ() {
-
+    private void executeISZ(int operand, boolean isIndirect) {
+        int data = CPUEngine.getInstance().getMemoryData(operand);
+        // CPUEngine.getInstance().getRegisterData();
     }
 
     private void executeCLA() {
