@@ -68,7 +68,6 @@ public class Parser {
     }
 
 
-
     private void executeORG(int location) {
         lcCounter.setLc(location);
     }
@@ -80,18 +79,18 @@ public class Parser {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
 
-            if(isLabelInstruction(instruction))
-                instruction = args.get(1);
-
             if (isPseudoInstruction(instruction)) {
                 executePseudoInstruction(args);
                 if (instruction.equals("ORG")) continue;
+
+            } else if (isLabelInstruction(instruction)) {
+                executeLabelInstruction(args);
+
             } else {
                 try {
                     executeNonPseudoInstruction(args);
                 } catch (IllegalArgumentException e) {
-                    OutputView.printUnknownInstructionError(lcCounter.getCurrentLc(), command);
-                    throw new UnknownInstructionException();
+                    throw new UnknownInstructionException("알 수 없는 Instruction을 발견 : " + command);
                 }
             }
 
@@ -101,22 +100,19 @@ public class Parser {
 
     private void executePseudoInstruction(List<String> args) {
         String instruction = args.get(0);
-
-        switch (instruction) {
-            case "END":
-                return;
-            case "ORG":
-                executeORG(Integer.parseInt(args.get(1)));
-                return;
-
+        if (instruction.equals("END")) {
+            return;
         }
-
-        if (isLabelInstruction(instruction)) {
-            String labelName = instruction.substring(0, instruction.length()-1);
-            Label label = getLabelByName(labelName);
-            // @deprecated
-            CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
+        if (instruction.equals("ORG")) {
+            executeORG(Integer.parseInt(args.get(1)));
+            return;
         }
+    }
+
+    private void executeLabelInstruction(List<String> args) {
+        String labelName = args.get(0).substring(0, args.get(0).length() - 1);
+        Label label = getLabelByName(labelName);
+        CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
     }
 
     private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
@@ -132,7 +128,9 @@ public class Parser {
             instructionHexCode += getLabelByName(args.get(1)).getLc();
         }
 
-        // @deprecated
+
+        System.out.println(Integer.toHexString(lcCounter.getCurrentLc()));
+        System.out.println(Integer.toHexString(instructionHexCode));
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }
 

@@ -16,7 +16,7 @@ public class InputView {
             String code = scanner.nextLine();
             program.add(code);
             command = code.split(" ")[0];
-        } while (command.equals("END"));
+        } while (!command.equals("END"));
 
         return program;
     }

@@ -2,7 +2,6 @@ package com.jnuhw.bcfirst;
 
 import com.jnuhw.bcfirst.controller.AssemblerController;
 import com.jnuhw.bcfirst.view.InputView;
-import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.*;
 
@@ -10,7 +9,6 @@ public class Application {
 
     // Main Method.
     public static void main(String[] args) {
-
         // 6-5 Code
 //        String[] addingTwoVariableProgram = new String[]{
 //                "ORG 1",
