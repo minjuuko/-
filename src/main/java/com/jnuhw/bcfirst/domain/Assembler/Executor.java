@@ -144,9 +144,13 @@ public class Executor {
         if(isIndirect){
             int data = CPUEngine.getInstance().getMemoryData(operand);
             CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
-        }
-            int ar = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-            CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);
+        }//AR <-M[AR]
+
+        int arData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);  //AR
+        //CPUEngine.getInstance().getRegisterData(RegisterType.PC);
+        //arData +=0;
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC,arData);    //PC <- AR
+
 
     }
 
@@ -154,13 +158,31 @@ public class Executor {
         if(isIndirect){
             int data = CPUEngine.getInstance().getMemoryData(operand);
             CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
-        }
-        int ar = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);
+        } //AR <-M[AR]
+
+        int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+        CPUEngine.getInstance().setMemoryData(operand,pcData);  //M[AR] <- PC
+        int arData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);  //AR
+        arData +=1; // AR <- AR+1
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC,arData);    //PC <- AR
     }
 
     private void executeISZ(int operand, boolean isIndirect) {
+        if(isIndirect){
+            int data = CPUEngine.getInstance().getMemoryData(operand);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
+        }   //AR <-M[AR]
 
+        int data2 = CPUEngine.getInstance().getMemoryData(operand);  //M[AR]
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR,data2);  //DR<- M[AR]
+        int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);  //DR
+        drData +=1; //DR <- DR+1
+        CPUEngine.getInstance().setMemoryData(operand,drData);  //M[AR] <- DR
+        if(drData==0){  //if(DR = 0)
+            int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+            pcData +=1; //PC+1
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,pcData);    //PC<-PC+1
+        }
     }
 
     private void executeCLA() {
