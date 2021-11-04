@@ -158,7 +158,7 @@ public class Executor {
             CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
         }
         int ar = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);b
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);
     }
 
     private void executeISZ(int operand, boolean isIndirect) {
