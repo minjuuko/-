@@ -53,13 +53,13 @@ public class Executor {
                     executeSTA();
                     break;
                 case BUN:
-                    executeBUN();
+                    executeBUN(operand,isInDirect);
                     break;
                 case BSA:
-                    executeBSA();
+                    executeBSA(operand,isInDirect);
                     break;
                 case ISZ:
-                    executeISZ();
+                    executeISZ(operand,isInDirect);
                     break;
 
                 // Register Instruction
@@ -143,6 +143,12 @@ public class Executor {
     }
 
     private void executeBUN(int operand, boolean isIndirect) {
+        if(isIndirect){
+            int data = CPUEngine.getInstance().getMemoryData(operand);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
+        }
+            int ar = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);
 
     }
 
@@ -151,8 +157,7 @@ public class Executor {
     }
 
     private void executeISZ(int operand, boolean isIndirect) {
-        int data = CPUEngine.getInstance().getMemoryData(operand);
-        // CPUEngine.getInstance().getRegisterData();
+
     }
 
     private void executeCLA() {
