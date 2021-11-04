@@ -60,8 +60,9 @@ public class Parser {
         label = label.substring(0, label.length() - 1);
         String data = args.get(2);
 
-        if (args.get(1).equals("HEX"))
+        if (args.get(1).equals("HEX")) {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
+        }
         else
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
 
@@ -128,9 +129,6 @@ public class Parser {
             instructionHexCode += getLabelByName(args.get(1)).getLc();
         }
 
-
-        System.out.println(Integer.toHexString(lcCounter.getCurrentLc()));
-        System.out.println(Integer.toHexString(instructionHexCode));
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }
 
