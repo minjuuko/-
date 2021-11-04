@@ -24,8 +24,9 @@ public class Parser {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
+            if(isLabelInstruction(instruction)) instruction = args.get(1);
 
-            if (isLabelInstruction(instruction)) {
+            if (instruction.equals("DEC") || instruction.equals("HEX")) {
                 addSymbolTable(args);
             }
 
@@ -56,15 +57,23 @@ public class Parser {
     }
 
     private void addSymbolTable(List<String> args) {
-        String label = args.get(0);
-        label = label.substring(0, label.length() - 1);
-        String data = args.get(2);
 
-        if (args.get(1).equals("HEX")) {
-            addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
+        String label = null;
+        String instruction = args.get(0);
+        String data = args.get(1);
+
+        if(isLabelInstruction(args.get(0))) {
+            label = args.get(0);
+            label = label.substring(0, label.length() - 1);
+            instruction = args.get(1);
+            data = args.get(2);
         }
-        else
+
+        if (instruction.equals("HEX")) {
+            addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
+        } else {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
+        }
 
     }
 
@@ -79,13 +88,11 @@ public class Parser {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
+            if(isLabelInstruction(instruction)) instruction = args.get(1);
 
             if (isPseudoInstruction(instruction)) {
                 executePseudoInstruction(args);
                 if (instruction.equals("ORG")) continue;
-
-            } else if (isLabelInstruction(instruction)) {
-                executeLabelInstruction(args);
 
             } else {
                 try {
@@ -101,18 +108,23 @@ public class Parser {
 
     private void executePseudoInstruction(List<String> args) {
         String instruction = args.get(0);
-        if (instruction.equals("END")) {
-            return;
+        if(isLabelInstruction(instruction)) instruction = args.get(1);
+
+        switch(instruction) {
+            case "END":
+                return;
+            case "ORG":
+                executeORG(Integer.parseInt(args.get(1)));
+                return;
+            case "DEC":
+            case "HEX":
+                executeLabelInstruction();
         }
-        if (instruction.equals("ORG")) {
-            executeORG(Integer.parseInt(args.get(1)));
-            return;
-        }
+
     }
 
-    private void executeLabelInstruction(List<String> args) {
-        String labelName = args.get(0).substring(0, args.get(0).length() - 1);
-        Label label = getLabelByName(labelName);
+    private void executeLabelInstruction() {
+        Label label = getLabelByLc(lcCounter.getCurrentLc());
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
     }
 
@@ -135,6 +147,12 @@ public class Parser {
     private Label getLabelByName(String name) {
         return addressLabelTable.stream()
                 .filter(l -> l.getName().equals(name))
+                .findAny().get();
+    }
+
+    private Label getLabelByLc(int lc) {
+        return addressLabelTable.stream()
+                .filter(l -> l.getLc() == lc)
                 .findAny().get();
     }
 }
