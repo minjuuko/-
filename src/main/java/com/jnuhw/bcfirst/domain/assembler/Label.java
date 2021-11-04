@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.domain.Assembler;
+package com.jnuhw.bcfirst.domain.assembler;
 
 
 public class Label {

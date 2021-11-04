@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.domain.Cpu;
+package com.jnuhw.bcfirst.domain.cpu;
 
 public enum FlipFlopType {
     I,
