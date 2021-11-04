@@ -153,7 +153,12 @@ public class Executor {
     }
 
     private void executeBSA(int operand, boolean isIndirect) {
-
+        if(isIndirect){
+            int data = CPUEngine.getInstance().getMemoryData(operand);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
+        }
+        int ar = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC,ar);b
     }
 
     private void executeISZ(int operand, boolean isIndirect) {
