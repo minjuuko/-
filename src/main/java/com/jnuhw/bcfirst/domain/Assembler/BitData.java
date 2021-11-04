@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.domain;
+package com.jnuhw.bcfirst.domain.Assembler;
 
 import com.jnuhw.bcfirst.view.OutputView;
 

@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.background;
+package com.jnuhw.bcfirst.domain.Cpu;
 
 public enum RegisterType {
     AR(12),

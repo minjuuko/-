@@ -1,7 +1,7 @@
-package com.jnuhw.bcfirst.domain;
+package com.jnuhw.bcfirst.domain.Assembler;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.background.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
 import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.*;
@@ -60,13 +60,13 @@ public class Parser {
         label = label.substring(0, label.length() - 1);
         String data = args.get(2);
 
-        if (args.get(1).equals("HEX"))
+        if (args.get(1).equals("HEX")) {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
+        }
         else
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
 
     }
-
 
 
     private void executeORG(int location) {
@@ -80,18 +80,18 @@ public class Parser {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
 
-            if(isLabelInstruction(instruction))
-                instruction = args.get(1);
-
             if (isPseudoInstruction(instruction)) {
                 executePseudoInstruction(args);
                 if (instruction.equals("ORG")) continue;
+
+            } else if (isLabelInstruction(instruction)) {
+                executeLabelInstruction(args);
+
             } else {
                 try {
                     executeNonPseudoInstruction(args);
                 } catch (IllegalArgumentException e) {
-                    OutputView.printUnknownInstructionError(lcCounter.getCurrentLc(), command);
-                    throw new UnknownInstructionException();
+                    throw new UnknownInstructionException("알 수 없는 Instruction을 발견 : " + command);
                 }
             }
 
@@ -101,22 +101,19 @@ public class Parser {
 
     private void executePseudoInstruction(List<String> args) {
         String instruction = args.get(0);
-
-        switch (instruction) {
-            case "END":
-                return;
-            case "ORG":
-                executeORG(Integer.parseInt(args.get(1)));
-                return;
-
+        if (instruction.equals("END")) {
+            return;
         }
-
-        if (isLabelInstruction(instruction)) {
-            String labelName = instruction.substring(0, instruction.length()-1);
-            Label label = getLabelByName(labelName);
-            // @deprecated
-            CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
+        if (instruction.equals("ORG")) {
+            executeORG(Integer.parseInt(args.get(1)));
+            return;
         }
+    }
+
+    private void executeLabelInstruction(List<String> args) {
+        String labelName = args.get(0).substring(0, args.get(0).length() - 1);
+        Label label = getLabelByName(labelName);
+        CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
     }
 
     private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
@@ -132,7 +129,6 @@ public class Parser {
             instructionHexCode += getLabelByName(args.get(1)).getLc();
         }
 
-        // @deprecated
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }
 
