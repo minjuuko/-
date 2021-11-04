@@ -146,7 +146,7 @@ public class Parser {
 
     private Label getLabelByName(String name) {
         return addressLabelTable.stream()
-                .filter(l -> l.getName().equals(name))
+                .filter(l -> l.getName() != null && l.getName().equals(name))
                 .findAny().get();
     }
 
