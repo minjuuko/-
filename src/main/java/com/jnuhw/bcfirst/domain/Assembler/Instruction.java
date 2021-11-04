@@ -78,20 +78,12 @@ public enum Instruction {
         return false;
     }
 
-    /**
-     * 데이터 주소가 섞여있는 MRI Instruction hexa code를 Instruction 판별용 hexa code로 변환함.
-     * @param memoryHexaCode
-     * @return MRI Instruction Hexa Code
-     */
+
     public static int getInstructionHexaCodeFromMemoryHexaCode(int memoryHexaCode) {
         return memoryHexaCode - memoryHexaCode % 0x1000;
     }
 
-    /**
-     * 데이터 주소가 섞여있는 MRI Instruction hexa code를 Instruction 판별용 hexa code로 변환함.
-     * @param memoryHexaCode
-     * @return MRI Instruction Hexa Code
-     */
+
     public static int getDataHexaCodeFromMemoryHexaCode(int memoryHexaCode) {
         return memoryHexaCode % 0x1000;
     }

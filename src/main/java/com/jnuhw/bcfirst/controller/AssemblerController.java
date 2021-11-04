@@ -25,7 +25,7 @@ public class AssemblerController {
         }
 
 
-        // (디버깅용) 정상적으로 프로그램이 실행 됬는지, Memory 주소 006 확인
+       
         printMemoryByAddress(0x0000);
         printMemoryByAddress(0x0001);
         printMemoryByAddress(0x0002);
@@ -34,7 +34,7 @@ public class AssemblerController {
         printMemoryByAddress(0x0005);
         printMemoryByAddress(0x0006);
         printMemoryByAddress(0x0007);
-        //
+        
     }
 
     public void printMemoryByAddress(int address) {

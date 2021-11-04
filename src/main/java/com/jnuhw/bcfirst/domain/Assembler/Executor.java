@@ -1,6 +1,7 @@
 package com.jnuhw.bcfirst.domain.Assembler;
 
 import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.FlipFlopType;
 import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
 
 import java.util.Arrays;
@@ -21,17 +22,16 @@ public class Executor {
         engine.setRegisterData(RegisterType.PC, startLc);
 
         while (true) {
-            int memoryData = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
+            int memoryData = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); 
 
-            // Instruction Information
+          
             int InstructionHexCode = memoryData;
             int operand = 0;
             boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
             boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
-                // int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                // operand = engine.getMemoryData(oprandAddress);
+             
                 operand = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
             }
 
@@ -39,7 +39,7 @@ public class Executor {
             Instruction instruction = Arrays.stream(Instruction.values()).filter(i -> i.getHexaCode() == _instructionHexCode).findAny().get();
             instruction.setIsInDirect(isInDirect);
             switch (instruction) {
-                // MRI Instruction
+               
                 case AND:
                     executeAND();
                     break;
@@ -62,7 +62,7 @@ public class Executor {
                     executeISZ();
                     break;
 
-                // Register Instruction
+               
                 case CLA:
                     executeCLA();
                     break;
@@ -115,12 +115,11 @@ public class Executor {
                 case IOF:
                     executeIOF();
                     break;
-                // Data
+                
                 default:
                     break;
             }
 
-            // END 명령어 판별 필요?
 
             engine.increaseRegister(RegisterType.PC);
         }
@@ -169,14 +168,77 @@ public class Executor {
     }
 
     private void executeCIR() {
+    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+    	String binaryString = Integer.toBinaryString(data);
+    	char c[]= binaryString.toCharArray();
+    	String Zero = "0";
+    	for(int i = 0; i < 15-binaryString.length();i++) {
+    		Zero = Zero + "0";
+    	}
+    	binaryString = Zero + binaryString; 
+    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    	for(int k = 0 ; k < 16; k++) {
+    		c[k]= binaryString.toCharArray()[k];
+    	}
+    	for(int i = 0; i < 16 ; i ++) {
+    		if(i==0) {
+    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, binaryString.charAt(i));
+    		}
+    		else if(i==15) {
+    			char e = (char)CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+    			a[i] = e;
+    		}
+    		else {
+    			a[i-1]=c[i];
+    		}
+    		
+    	}
+        String binary = String.valueOf(a);
+        int data1 = Integer.parseInt(binary,2);
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
 
     }
 
     private void executeCIL() {
+    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+    	String binaryString = Integer.toBinaryString(data);
+    
+    	char c[]= binaryString.toCharArray();
+    	
+    	String Zero = "0";
+    	for(int i = 0; i < 15-binaryString.length();i++) {
+    		Zero = Zero + "0";
+    	}
+    	binaryString = Zero + binaryString; 
+    	
+    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    
+    	for(int i = 0; i < 16 ; i ++) {
+    		if(i==0) {
+    			char e = (char)CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+    			a[i] = e;
+    			
+    		}
+    		else if(i==15) {
+    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, binaryString.charAt(i));
+    		}
+    		else {
+    			a[i+1]=c[i];
+    		}
+    		
+    	}
+        String binary = String.valueOf(a);
+        int data1 = Integer.parseInt(binary,2);
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
+
 
     }
 
     private void executeINC() {
+    	
+    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+    	data = data+1;
+    	CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
 
     }
 

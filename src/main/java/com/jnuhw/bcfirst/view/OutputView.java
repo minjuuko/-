@@ -7,15 +7,15 @@ public class OutputView {
     }
 
     public static void printErrorAnnouncement() {
-        System.out.println("í”„ë¡œê·¸ë¨ì´ ì‹¤í–‰ ì¤‘ ì˜¤ë¥˜ë¡œ ì¸í•´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+        System.out.println("ÇÁ·Î±×·¥ÀÌ ½ÇÇà Áß ¿À·ù·Î ÀÎÇØ Á¾·áµÇ¾ú½À´Ï´Ù.");
     }
 
     public static void printUnknownInstructionError(int lc, String command) {
-        System.out.println("ì•Œ ìˆ˜ ì—†ëŠ” Instruction ì…ë‹ˆë‹¤. >");
+        System.out.println("¾Ë ¼ö ¾ø´Â Instruction ÀÔ´Ï´Ù. >");
         System.out.printf("[%d] %s", lc, command);
     }
 
     public static void printDataOverflowError(int data) {
-        System.out.println("overflow ê°€ ë°œìƒí•˜ì˜€ìŠµìŠµë‹ˆë‹¤. data=" + data);
+        System.out.println("overflow °¡ ¹ß»ıÇÏ¿´½À½À´Ï´Ù. data=" + data);
     }
 }

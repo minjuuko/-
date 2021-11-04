@@ -4,7 +4,7 @@ package com.jnuhw.bcfirst.domain.Assembler;
 public class Label {
 
     private String name;
-    // 선언 명령어의 LC
+   
     private int lc;
     private int data;
 

@@ -7,7 +7,7 @@ public class BitData {
     private final int bitSize;
 
     private boolean isSigned;
-    // 데이터는 2진수로 관리되고, 계산되어야 함;
+   
     private int data = 0;
 
     public BitData(int bitSize) {

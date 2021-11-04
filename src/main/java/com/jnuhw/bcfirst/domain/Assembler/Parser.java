@@ -91,7 +91,7 @@ public class Parser {
                 try {
                     executeNonPseudoInstruction(args);
                 } catch (IllegalArgumentException e) {
-                    throw new UnknownInstructionException("ì•Œ ìˆ˜ ì—†ëŠ” Instructionì„ ë°œê²¬ : " + command);
+                    throw new UnknownInstructionException("¾Ë ¼ö ¾ø´Â InstructionÀ» ¹ß°ß : " + command);
                 }
             }
 
