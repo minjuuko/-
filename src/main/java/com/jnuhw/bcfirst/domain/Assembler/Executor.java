@@ -168,28 +168,38 @@ public class Executor {
     }
 
     private void executeCIR() {
-    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-    	String binaryString = Integer.toBinaryString(data);
-    	char c[]= binaryString.toCharArray();
-    	String Zero = "0";
-    	for(int i = 0; i < 15-binaryString.length();i++) {
-    		Zero = Zero + "0";
-    	}
-    	binaryString = Zero + binaryString; 
-    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
-    	for(int k = 0 ; k < 16; k++) {
-    		c[k]= binaryString.toCharArray()[k];
-    	}
+    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
+    				//AC의 값을 받아와 data에 저장
+    	
+    	String binaryString = Integer.toBinaryString(data); //받아온 AC의 값을 2진수 문자열로 저장
+    	String b = String.format("%016d", Integer.parseInt(binaryString));
+    			//2진수 문자열을 받아오고 이를 16비트 형태로 저장
+    	
+    	char c[]= b.toCharArray();
+    	char a[]= b.toCharArray();
+    	int f1 = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+
     	for(int i = 0; i < 16 ; i ++) {
     		if(i==0) {
-    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, binaryString.charAt(i));
-    		}
+    			if(f1==0)
+    			{    f1 =48;
+    				a[i]= (char)f1;
+    			}
+    			else {
+    				f1 =49;
+    				a[i]= (char)f1;
+    			}
+    	
+    			}
+    			
+    	
     		else if(i==15) {
-    			char e = (char)CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
-    			a[i] = e;
+    			a[i]=c[i-1];
+    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(b.charAt(i)));
+    			
     		}
     		else {
-    			a[i-1]=c[i];
+    			a[i]=c[i-1];
     		}
     		
     	}
@@ -200,39 +210,44 @@ public class Executor {
     }
 
     private void executeCIL() {
-    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-    	String binaryString = Integer.toBinaryString(data);
-    
-    	char c[]= binaryString.toCharArray();
-    	
-    	String Zero = "0";
-    	for(int i = 0; i < 15-binaryString.length();i++) {
-    		Zero = Zero + "0";
-    	}
-    	binaryString = Zero + binaryString; 
-    	
-    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
-    
-    	for(int i = 0; i < 16 ; i ++) {
-    		if(i==0) {
-    			char e = (char)CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
-    			a[i] = e;
-    			
-    		}
-    		else if(i==15) {
-    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, binaryString.charAt(i));
-    		}
-    		else {
-    			a[i+1]=c[i];
-    		}
-    		
-    	}
-        String binary = String.valueOf(a);
-        int data1 = Integer.parseInt(binary,2);
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
+    	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
+			//AC의 값을 받아와 data에 저장
 
+    	String binaryString = Integer.toBinaryString(data); //받아온 AC의 값을 2진수 문자열로 저장
+    	String b = String.format("%016d", Integer.parseInt(binaryString));
+    		//2진수 문자열을 받아오고 이를 16비트 형태로 저장
 
-    }
+    		char c[]= b.toCharArray();
+    		char a[]= b.toCharArray();
+    		int f1 = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+
+    		for(int i = 0; i < 16 ; i ++) {	
+    			if(i==0) {
+    				a[i]=c[i+1];
+    				CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(b.charAt(i)));
+    			}
+    			else if(i==15) {
+
+    				if(f1==0)
+    				{    f1 =48;
+    					a[i]= (char)f1;
+    				}
+    				else {
+    					f1 =49;
+    					a[i]= (char)f1;
+    					}
+
+    					}
+	
+    			else {
+    				a[i]=c[i+1];
+    				}
+
+    			}
+    		String binary = String.valueOf(a);
+    		int data1 = Integer.parseInt(binary,2);
+    		CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
+    			}
 
     private void executeINC() {
     	
