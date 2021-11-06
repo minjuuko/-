@@ -171,12 +171,21 @@ public class Executor {
     	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
     				//AC의 값을 받아와 data에 저장
     	
-    	String binaryString = Integer.toBinaryString(data); //받아온 AC의 값을 2진수 문자열로 저장
-    	String b = String.format("%016d", Integer.parseInt(binaryString));
-    			//2진수 문자열을 받아오고 이를 16비트 형태로 저장
+    	char arr[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+	    //받아온 AC의 값을 2진수 형태로 저장할 크기가 16인 char배열 선언
+	
+    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+	    //위의 2진수 형태로 저장된 배열을 왼쪽으로 shift한 값을 저장할 또 다른 크기가 16인 char 배열 선언
+	
+    	for(int i = 15; i >= 0 ; i--) {
+    		if((data&(1<<i))==0)
+    			arr[15-i]= '0';
+    		else
+    			arr[15-i]='1';
+    		}
+	    			//넘겨받은 10진수의 AC의 값을 2진수인 형태로 변환해주는 for문
+					//이 변환된 2진수는 arr배열에 저장된다 
     	
-    	char c[]= b.toCharArray();
-    	char a[]= b.toCharArray();
     	int f1 = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
 
     	for(int i = 0; i < 16 ; i ++) {
@@ -194,12 +203,12 @@ public class Executor {
     			
     	
     		else if(i==15) {
-    			a[i]=c[i-1];
-    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(b.charAt(i)));
+    			a[i]=arr[i-1];
+    			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(arr[i]));
     			
     		}
     		else {
-    			a[i]=c[i-1];
+    			a[i]=arr[i-1];
     		}
     		
     	}
@@ -213,40 +222,51 @@ public class Executor {
     	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
 			//AC의 값을 받아와 data에 저장
 
-    	String binaryString = Integer.toBinaryString(data); //받아온 AC의 값을 2진수 문자열로 저장
-    	String b = String.format("%016d", Integer.parseInt(binaryString));
-    		//2진수 문자열을 받아오고 이를 16비트 형태로 저장
-
-    		char c[]= b.toCharArray();
-    		char a[]= b.toCharArray();
+    	char arr[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    	    //받아온 AC의 값을 2진수 형태로 저장할 크기가 16인 char배열 선언
+    	
+    	char a[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    	    //위의 2진수 형태로 저장된 배열을 왼쪽으로 shift한 값을 저장할 또 다른 크기가 16인 char 배열 선언
+    	
+		for(int i = 15; i >= 0 ; i--) {
+			if((data&(1<<i))==0)
+				arr[15-i]= '0';
+			else
+				arr[15-i]='1';
+		}
+    	    //넘겨받은 10진수의 AC의 값을 2진수인 형태로 변환해주는 for문
+			//이 변환된 2진수는 arr배열에 저장된다
+		
     		int f1 = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+    					//E 플립플롭에 있는 값을 f1 변수에 저장한다.
 
     		for(int i = 0; i < 16 ; i ++) {	
-    			if(i==0) {
-    				a[i]=c[i+1];
-    				CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(b.charAt(i)));
+    			if(i==0) { //
+    				a[i]=arr[i+1];
+    				CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(arr[i]));
     			}
     			else if(i==15) {
 
     				if(f1==0)
-    				{    f1 =48;
+    				{    f1 =48; 
     					a[i]= (char)f1;
     				}
     				else {
     					f1 =49;
     					a[i]= (char)f1;
     					}
-
+    									//E에서 받아온 값은 int형이고 저장할 배열은 char형이므로 E에서 받아온 값에 따라 
+									//값을 아스키코드로 변경 후 char형인 '0'과 '1'을 각각 a[15]에 넣어준다.
     					}
 	
     			else {
-    				a[i]=c[i+1];
+    				a[i]=arr[i+1]; //shl(AC)의 과정
     				}
 
     			}
-    		String binary = String.valueOf(a);
-    		int data1 = Integer.parseInt(binary,2);
-    		CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
+    		String binary = String.valueOf(a); //shift된 2진수 형태의 배열 a를 string형으로 변환해주고
+    		int data1 = Integer.parseInt(binary,2); //변환된 string형태의 2진수를 다시 10진수로 변환해준다
+    		CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);//그리고 이 변환된 10진수를 다시 AC의 값으로 set 시킨다.
     			}
 
     private void executeINC() {
