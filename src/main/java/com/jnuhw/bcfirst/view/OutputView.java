@@ -1,6 +1,17 @@
 package com.jnuhw.bcfirst.view;
 
+import com.jnuhw.bcfirst.domain.assembler.Memory;
+import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.cpu.RegisterType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 public class OutputView {
+
+    private static HashMap<Integer, Integer> prevMemoryDatas;
 
     public static void printMemory(int address, int value) {
         System.out.println("Memory[" + address + "] data : " + String.format("0X%04X", value));
@@ -17,5 +28,50 @@ public class OutputView {
 
     public static void printDataOverflowError(int data) {
         System.out.println("overflow 가 발생하였습습니다. data=" + data);
+    }
+
+    public static void saveMemoryData() {
+        prevMemoryDatas = new HashMap<>();
+
+        for(int i = 0 ; i < Memory.MEMORY_SIZE ; i++) {
+            int data = CPUEngine.getInstance().getMemoryData(i);
+            prevMemoryDatas.put(i, data);
+        }
+    }
+
+    public static void printResultView() {
+        List<Integer> keys = findChangedMemories();
+
+        System.out.println("프로그램 실행 후, 저장된 데이터가 변경된 메모리 목록입니다.");
+        for(int key : keys) {
+            String message = "Memory[0x%s] data : 0x%s";
+            String keyHex = Integer.toHexString(key).toUpperCase(Locale.ROOT);
+            String valHex = Integer.toHexString(CPUEngine.getInstance().getMemoryData(key)).toUpperCase(Locale.ROOT);
+
+            System.out.println(String.format(message, keyHex, valHex));
+        }
+
+        System.out.println("\n프로그램 종료 시점 레지스터의 상태입니다.");
+        for(RegisterType type : RegisterType.values()) {
+            String message = "%s[0-%d] : 0x%s";
+            String regName = type.name();
+            int regSize = type.getBitSize();
+            String regData = Integer.toHexString(CPUEngine.getInstance().getRegisterData(type)).toUpperCase(Locale.ROOT);
+
+            System.out.println(String.format(message, regName, regSize-1, regData));
+        }
+    }
+
+    private static List<Integer> findChangedMemories() {
+        List<Integer> keys = new ArrayList<>();
+
+        for(int key : prevMemoryDatas.keySet()) {
+            int data = CPUEngine.getInstance().getMemoryData(key);
+            if(prevMemoryDatas.get(key) != data) {
+                keys.add(key);
+            }
+        }
+
+        return keys;
     }
 }
