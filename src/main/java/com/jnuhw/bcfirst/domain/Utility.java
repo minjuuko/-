@@ -1,6 +1,6 @@
 package com.jnuhw.bcfirst.domain;
 
-import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.cpu.RegisterType;
 
 public class Utility {
 

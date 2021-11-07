@@ -1,9 +1,9 @@
-package com.jnuhw.bcfirst.domain.Assembler;
+package com.jnuhw.bcfirst.domain.assembler;
 
-import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
-import com.jnuhw.bcfirst.domain.Cpu.FlipFlopType;
-import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
 import com.jnuhw.bcfirst.domain.Utility;
+import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.cpu.FlipFlopType;
+import com.jnuhw.bcfirst.domain.cpu.RegisterType;
 
 import java.util.Arrays;
 
@@ -26,17 +26,16 @@ public class Executor {
         while (true) {
             int instructionDataInMemory = cpuEngine.getMemoryData(cpuEngine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
             cpuEngine.increaseRegister(RegisterType.PC);
+            cpuEngine.setRegisterData(RegisterType.IR, instructionDataInMemory);
 
             // Instruction Information
             int InstructionHexCode = instructionDataInMemory;
-            int operand = 0;
             int operandAddress = 0;
             boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
             boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(instructionDataInMemory);
                 operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
-                operand = cpuEngine.getMemoryData(operandAddress);
             }
 
             int _instructionHexCode = InstructionHexCode;
@@ -233,7 +232,7 @@ public class Executor {
         int drData = cpuEngine.getRegisterData(RegisterType.DR);
         cpuEngine.setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            cpuEngine.increaseRegister(RegisterType.AR);
+            cpuEngine.increaseRegister(RegisterType.PC);
         }
     }
 
@@ -327,7 +326,6 @@ public class Executor {
             //PC<-PC+1
             cpuEngine.increaseRegister(RegisterType.PC);
         }
-
     }
 
 
