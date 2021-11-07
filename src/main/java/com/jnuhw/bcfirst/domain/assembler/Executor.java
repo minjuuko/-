@@ -1,8 +1,8 @@
-package com.jnuhw.bcfirst.domain.Assembler;
+package com.jnuhw.bcfirst.domain.assembler;
 
-import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
-import com.jnuhw.bcfirst.domain.Cpu.FlipFlopType;
-import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.cpu.FlipFlopType;
+import com.jnuhw.bcfirst.domain.cpu.RegisterType;
 import com.jnuhw.bcfirst.domain.Utility;
 
 import java.util.Arrays;
@@ -287,7 +287,7 @@ public class Executor {
         String acBinary = Utility.toFormatBinaryString(acData);
 
         //if(AC<0)
-        if (acBinary.charAt(0) == 0)
+        if (acBinary.charAt(0) == 0) {
 
             //PC<-PC+1
             CPUEngine.getInstance().increaseRegister(RegisterType.PC);
