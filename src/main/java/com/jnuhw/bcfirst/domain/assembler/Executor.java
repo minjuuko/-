@@ -18,13 +18,14 @@ public class Executor {
         return instance;
     }
 
+    private CPUEngine cpuEngine = CPUEngine.getInstance();
+
     public void execute(int startLc) {
-        CPUEngine engine = CPUEngine.getInstance();
-        engine.setRegisterData(RegisterType.PC, startLc);
+        cpuEngine.setRegisterData(RegisterType.PC, startLc);
 
         while (true) {
-            int instructionDataInMemory = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
-            engine.increaseRegister(RegisterType.PC);
+            int instructionDataInMemory = cpuEngine.getMemoryData(cpuEngine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
+            cpuEngine.increaseRegister(RegisterType.PC);
 
             // Instruction Information
             int InstructionHexCode = instructionDataInMemory;
@@ -35,7 +36,7 @@ public class Executor {
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(instructionDataInMemory);
                 operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
-                operand = engine.getMemoryData(operandAddress);
+                operand = cpuEngine.getMemoryData(operandAddress);
             }
 
             int _instructionHexCode = InstructionHexCode;
@@ -129,10 +130,10 @@ public class Executor {
     }
 
     private void setARWithOperand(int operandAddress, boolean isIndirect) {
-        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
+        cpuEngine.setRegisterData(RegisterType.AR, operandAddress);
         if (isIndirect) {
-            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
-            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
+            int indirectAddress = cpuEngine.getMemoryData(operandAddress);
+            cpuEngine.setRegisterData(RegisterType.AR, indirectAddress);
         }
     }
 
@@ -142,11 +143,11 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // DR <- M[AR]
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+        int address = cpuEngine.getRegisterData(RegisterType.AR);
+        int data = cpuEngine.getMemoryData(address);
+        cpuEngine.setRegisterData(RegisterType.DR, data);
 
-        CPUEngine.getInstance().useALU(Instruction.AND);
+        cpuEngine.useALU(Instruction.AND);
     }
 
     private void executeADD(int operandAddress, boolean isIndirect) {
@@ -155,11 +156,11 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // DR <- M[AR]
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+        int address = cpuEngine.getRegisterData(RegisterType.AR);
+        int data = cpuEngine.getMemoryData(address);
+        cpuEngine.setRegisterData(RegisterType.DR, data);
 
-        CPUEngine.getInstance().useALU(Instruction.ADD);
+        cpuEngine.useALU(Instruction.ADD);
     }
 
     private void executeLDA(int operandAddress, boolean isIndirect) {
@@ -168,12 +169,12 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // DR <- M[AR]
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+        int address = cpuEngine.getRegisterData(RegisterType.AR);
+        int data = cpuEngine.getMemoryData(address);
+        cpuEngine.setRegisterData(RegisterType.DR, data);
 
         // AC <- DR
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
+        cpuEngine.setRegisterData(RegisterType.AC, data);
     }
 
     private void executeSTA(int operandAddress, boolean isIndirect) {
@@ -181,9 +182,9 @@ public class Executor {
         // AR <- Operand
         setARWithOperand(operandAddress, isIndirect);
 
-        int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        CPUEngine.getInstance().setMemoryData(address, data);
+        int data = cpuEngine.getRegisterData(RegisterType.AC);
+        int address = cpuEngine.getRegisterData(RegisterType.AR);
+        cpuEngine.setMemoryData(address, data);
     }
 
 
@@ -193,8 +194,8 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // PC <- AR
-        int arData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        CPUEngine.getInstance().setRegisterData(RegisterType.PC, arData);
+        int arData = cpuEngine.getRegisterData(RegisterType.AR);
+        cpuEngine.setRegisterData(RegisterType.PC, arData);
     }
 
     private void executeBSA(int operandAddress, boolean isIndirect) {
@@ -203,16 +204,16 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // M[AR] <- PC
-        int arAddress = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);
-        CPUEngine.getInstance().setMemoryData(arAddress, pcData);
+        int arAddress = cpuEngine.getRegisterData(RegisterType.AR);
+        int pcData = cpuEngine.getRegisterData(RegisterType.PC);
+        cpuEngine.setMemoryData(arAddress, pcData);
 
         // AR <- AR + 1
-        CPUEngine.getInstance().increaseRegister(RegisterType.AC);
+        cpuEngine.increaseRegister(RegisterType.AC);
 
         // PC <- AR
-        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-        CPUEngine.getInstance().setRegisterData(RegisterType.PC, acData);
+        int acData = cpuEngine.getRegisterData(RegisterType.AC);
+        cpuEngine.setRegisterData(RegisterType.PC, acData);
     }
 
     private void executeISZ(int operandAddress, boolean isIndirect) {
@@ -221,18 +222,18 @@ public class Executor {
         setARWithOperand(operandAddress, isIndirect);
 
         // DR <- M[AR]
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+        int address = cpuEngine.getRegisterData(RegisterType.AR);
+        int data = cpuEngine.getMemoryData(address);
+        cpuEngine.setRegisterData(RegisterType.DR, data);
 
         // DR <- DR + 1
-        CPUEngine.getInstance().increaseRegister(RegisterType.DR);
+        cpuEngine.increaseRegister(RegisterType.DR);
 
         // M[AR] <- DR
-        int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);
-        CPUEngine.getInstance().setMemoryData(address, drData);
+        int drData = cpuEngine.getRegisterData(RegisterType.DR);
+        cpuEngine.setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            CPUEngine.getInstance().increaseRegister(RegisterType.AR);
+            cpuEngine.increaseRegister(RegisterType.AR);
         }
     }
 
@@ -254,104 +255,132 @@ public class Executor {
     }
 
     private void executeCIR() {
-        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
-        int topBit = Character.getNumericValue(acBinary.charAt(acBinary.length() - 1));
-        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+        String acBinaryData = Utility.toFormatBinaryString(cpuEngine.getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinaryData.charAt(acBinaryData.length() - 1));
+        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
 
-        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
-        String newAcBinary = eBit + acBinary.substring(0, acBinary.length() - 1);
-        int newAcData = Integer.parseInt(newAcBinary, 2);
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, newAcData);
+        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinaryData = eBit + acBinaryData.substring(0, acBinaryData.length() - 1);
+        int newAcData = Integer.parseInt(newAcBinaryData, 2);
+        cpuEngine.setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeCIL() {
-        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
-        int topBit = Character.getNumericValue(acBinary.charAt(0));
-        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+        String acBinaryData = Utility.toFormatBinaryString(cpuEngine.getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinaryData.charAt(0));
+        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
 
-        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
-        String newAcBinary = acBinary.substring(1) + eBit;
-        int newAcData = Integer.parseInt(newAcBinary, 2);
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, newAcData);
+        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinaryData = acBinaryData.substring(1) + eBit;
+        int newAcData = Integer.parseInt(newAcBinaryData, 2);
+        cpuEngine.setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeINC() {
-        CPUEngine.getInstance().increaseRegister(RegisterType.AC);
+        cpuEngine.increaseRegister(RegisterType.AC);
     }
 
 
 
 
     private void executeSPA() {
-        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
-        String acBinary = Utility.toFormatBinaryString(acData);
+        int acData = cpuEngine.getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinaryData = Utility.toFormatBinaryString(acData);
 
         //if(AC<0)
-        if (acBinary.charAt(0) == 0)
+        if (acBinaryData.charAt(0) == 0) {
 
             //PC<-PC+1
-            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+            cpuEngine.increaseRegister(RegisterType.PC);
         }
-
     }
 
     private void executeSNA() {
-        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
-        String acBinary = Utility.toFormatBinaryString(acData);
+        int acData = cpuEngine.getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinaryData = Utility.toFormatBinaryString(acData);
 
         //if(AC<0)
-        if (acBinary.charAt(0) == 1) {
+        if (acBinaryData.charAt(0) == 1) {
 
             //PC<-PC+1
-            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+            cpuEngine.increaseRegister(RegisterType.PC);
         }
 
     }
 
     private void executeSZA() {
-        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        int acData = cpuEngine.getRegisterData(RegisterType.AC); // AC값 acData에 저장
 
         //if(AC = 0)
         if (acData == 0) {
 
             //PC<-PC+1
-            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+            cpuEngine.increaseRegister(RegisterType.PC);
         }
 
     }
 
     private void executeSZE() {
-        int eData = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+        int eData = cpuEngine.getFlipFlopData(FlipFlopType.E);
         if (eData == 0) {
 
             //PC<-PC+1
-            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+            cpuEngine.increaseRegister(RegisterType.PC);
         }
 
     }
 
 
+
+
     private void executeINP() {
+
+        // AC(0-7) <- INPR
+        int inprData = cpuEngine.getRegisterData(RegisterType.INPR);
+        String inprBinaryData = Utility.toFormatBinaryString(inprData);
+
+        int acData = cpuEngine.getRegisterData(RegisterType.AC);
+        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String newAcBinaryData = acBinaryData.substring(0, acBinaryData.length() - 8) + inprBinaryData;
+        int newAcData = Integer.parseInt(newAcBinaryData, 2);
+        cpuEngine.setRegisterData(RegisterType.AC, newAcData);
+
+        // FGI <- 0
+        cpuEngine.setFlipFlopData(FlipFlopType.FGI, 0);
 
     }
 
     private void executeOUT() {
 
+        // OUTR <- AC(0-7)
+        int acData = cpuEngine.getRegisterData(RegisterType.AC);
+        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String dividedAcBinaryData = acBinaryData.substring(acBinaryData.length() - 8);
+        int dividedAcData = Integer.parseInt(dividedAcBinaryData, 2);
+
+        cpuEngine.setRegisterData(RegisterType.OUTR, dividedAcData);
+
+        // FGO <- 0
+        cpuEngine.setFlipFlopData(FlipFlopType.FGO, 0);
     }
 
     private void executeSKI() {
-
+        if (cpuEngine.getFlipFlopData(FlipFlopType.FGI) == 1) {
+            cpuEngine.increaseRegister(RegisterType.PC);
+        }
     }
 
     private void executeSKO() {
-
+        if (cpuEngine.getFlipFlopData(FlipFlopType.FGO) == 1) {
+            cpuEngine.increaseRegister(RegisterType.PC);
+        }
     }
 
     private void executeION() {
-
+        cpuEngine.setFlipFlopData(FlipFlopType.IEN, 1);
     }
 
     private void executeIOF() {
-
+        cpuEngine.setFlipFlopData(FlipFlopType.IEN, 0);
     }
 }
