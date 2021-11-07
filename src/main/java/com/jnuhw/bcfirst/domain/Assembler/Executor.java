@@ -127,17 +127,33 @@ public class Executor {
     }
 
     private void executeAND() {
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+
+        CPUEngine.getInstance().useALU(Instruction.AND);
     }
 
     private void executeADD() {
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
 
+        CPUEngine.getInstance().useALU(Instruction.ADD);
     }
 
     private void executeLDA() {
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
     }
 
     private void executeSTA() {
-
+        int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        CPUEngine.getInstance().setMemoryData(address, data);
     }
 
     private void executeBUN() {

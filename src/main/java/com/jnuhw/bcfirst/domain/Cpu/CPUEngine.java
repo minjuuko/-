@@ -94,6 +94,4 @@ public class CPUEngine {
     public void initializeMemoryData(int address, boolean isNumeralData, int data) {
         memory.initializeMemoryData(address, isNumeralData, data);
     }
-
-
 }
