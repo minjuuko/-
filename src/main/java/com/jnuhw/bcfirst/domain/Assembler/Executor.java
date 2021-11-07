@@ -168,6 +168,8 @@ public class Executor {
     }
 
     private void executeCIR() {
+    	//CPUEngine.getInstance().setRegisterData(RegisterType.AC, 34);
+    	
     	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
     				//AC의 값을 받아와 data에 저장
     	
@@ -203,6 +205,7 @@ public class Executor {
     			
     	
     		else if(i==15) {
+    			
     			a[i]=arr[i-1];
     			CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, Character.getNumericValue(arr[i]));
     			
@@ -215,10 +218,15 @@ public class Executor {
         String binary = String.valueOf(a);
         int data1 = Integer.parseInt(binary,2);
         CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);
+        
+       //int ac = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+    	//System.out.println(ac);
 
     }
 
     private void executeCIL() {
+    	//CPUEngine.getInstance().setRegisterData(RegisterType.AC, 34);
+    	
     	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC); 
 			//AC의 값을 받아와 data에 저장
 
@@ -267,13 +275,21 @@ public class Executor {
     		String binary = String.valueOf(a); //shift된 2진수 형태의 배열 a를 string형으로 변환해주고
     		int data1 = Integer.parseInt(binary,2); //변환된 string형태의 2진수를 다시 10진수로 변환해준다
     		CPUEngine.getInstance().setRegisterData(RegisterType.AC, data1);//그리고 이 변환된 10진수를 다시 AC의 값으로 set 시킨다.
+    		
+    		//int ac = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+        	//System.out.println(ac);
+
     			}
 
     private void executeINC() {
+    	//CPUEngine.getInstance().setRegisterData(RegisterType.AC, 34);
     	
     	int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
     	data = data+1;
     	CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
+    	
+    	//int a = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+    	//System.out.println(a);
 
     }
 
