@@ -25,6 +25,7 @@ public class Executor {
         while (true) {
             int instructionDataInMemory = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
             engine.increaseRegister(RegisterType.PC);
+            engine.setRegisterData(RegisterType.IR, instructionDataInMemory);
 
             // Instruction Information
             int InstructionHexCode = instructionDataInMemory;
