@@ -232,7 +232,7 @@ public class Executor {
         int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);
         CPUEngine.getInstance().setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            CPUEngine.getInstance().increaseRegister(RegisterType.AR);
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
         }
     }
 
