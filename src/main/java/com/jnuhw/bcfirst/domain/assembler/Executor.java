@@ -1,7 +1,9 @@
-package com.jnuhw.bcfirst.domain.assembler;
+package com.jnuhw.bcfirst.domain.Assembler;
 
-import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
-import com.jnuhw.bcfirst.domain.cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.FlipFlopType;
+import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.Utility;
 
 import java.util.Arrays;
 
@@ -23,7 +25,6 @@ public class Executor {
         while (true) {
             int instructionDataInMemory = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
             engine.increaseRegister(RegisterType.PC);
-            engine.setRegisterData(RegisterType.IR, instructionDataInMemory);
 
             // Instruction Information
             int InstructionHexCode = instructionDataInMemory;
@@ -94,6 +95,9 @@ public class Executor {
                     break;
                 case SZA:
                     executeSZA();
+                    break;
+                case SZE:
+                    executeSZE();
                     break;
                 case HLT:
                     return;
@@ -183,8 +187,6 @@ public class Executor {
     }
 
 
-
-
     private void executeBUN(int operandAddress, boolean isIndirect) {
 
         // AR <- Operand
@@ -230,14 +232,13 @@ public class Executor {
         int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);
         CPUEngine.getInstance().setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+            CPUEngine.getInstance().increaseRegister(RegisterType.AR);
         }
     }
 
 
-
     private void executeCLA() {
-        CPUEngine.getInstance().clearRegister(RegisterType.AC);
+
     }
 
     private void executeCLE() {
@@ -253,28 +254,82 @@ public class Executor {
     }
 
     private void executeCIR() {
+        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinary.charAt(acBinary.length() - 1));
+        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
 
+        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinary = eBit + acBinary.substring(0, acBinary.length() - 1);
+        int newAcData = Integer.parseInt(newAcBinary, 2);
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeCIL() {
+        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinary.charAt(0));
+        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
 
+        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinary = acBinary.substring(1) + eBit;
+        int newAcData = Integer.parseInt(newAcBinary, 2);
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeINC() {
-
+        CPUEngine.getInstance().increaseRegister(RegisterType.AC);
     }
 
+
+
+
     private void executeSPA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinary = Utility.toFormatBinaryString(acData);
+
+        //if(AC<0)
+        if (acBinary.charAt(0) == 0)
+
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+        }
 
     }
 
     private void executeSNA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinary = Utility.toFormatBinaryString(acData);
+
+        //if(AC<0)
+        if (acBinary.charAt(0) == 1) {
+
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+        }
 
     }
 
     private void executeSZA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+
+        //if(AC = 0)
+        if (acData == 0) {
+
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+        }
 
     }
+
+    private void executeSZE() {
+        int eData = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+        if (eData == 0) {
+
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+        }
+
+    }
+
 
     private void executeINP() {
 
