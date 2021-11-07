@@ -1,8 +1,8 @@
-package com.jnuhw.bcfirst.domain.Cpu;
+package com.jnuhw.bcfirst.domain.cpu;
 
-import com.jnuhw.bcfirst.domain.Assembler.BitData;
-import com.jnuhw.bcfirst.domain.Assembler.Instruction;
-import com.jnuhw.bcfirst.domain.Assembler.Memory;
+import com.jnuhw.bcfirst.domain.assembler.BitData;
+import com.jnuhw.bcfirst.domain.assembler.Instruction;
+import com.jnuhw.bcfirst.domain.assembler.Memory;
 
 import java.util.HashMap;
 
