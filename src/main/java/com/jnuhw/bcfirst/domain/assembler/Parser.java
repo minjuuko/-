@@ -23,7 +23,7 @@ public class Parser {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
-            if(isLabelInstruction(instruction)) {
+            if(isLabelInstruction(instruction) || instruction.equals("DEC") || instruction.equals("HEX")) {
                 addSymbolTable(args);
             } else {
 
