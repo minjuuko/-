@@ -1,7 +1,7 @@
-package com.jnuhw.bcfirst.domain.assembler;
+package com.jnuhw.bcfirst.domain.Assembler;
 
-import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
-import com.jnuhw.bcfirst.domain.cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
 
 import java.util.Arrays;
 
@@ -10,7 +10,7 @@ public class Executor {
     private static Executor instance;
 
     public static Executor getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new Executor();
 
         return instance;
@@ -26,13 +26,13 @@ public class Executor {
             // Instruction Information
             int InstructionHexCode = memoryData;
             int operand = 0;
+            int oprandAddress = 0;
             boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
             boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
                 InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
-                // int oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                // operand = engine.getMemoryData(oprandAddress);
-                operand = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
+                oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
+                operand = engine.getMemoryData(oprandAddress);
             }
 
             int _instructionHexCode = InstructionHexCode;
@@ -41,16 +41,16 @@ public class Executor {
             switch (instruction) {
                 // MRI Instruction
                 case AND:
-                    executeAND();
+                    executeAND(operand);
                     break;
                 case ADD:
-                    executeADD();
+                    executeADD(operand);
                     break;
                 case LDA:
-                    executeLDA();
+                    executeLDA(operand);
                     break;
                 case STA:
-                    executeSTA();
+                    executeSTA(oprandAddress);
                     break;
                 case BUN:
                     executeBUN();
@@ -126,34 +126,26 @@ public class Executor {
         }
     }
 
-    private void executeAND() {
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+    private void executeAND(int operand) {
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
 
         CPUEngine.getInstance().useALU(Instruction.AND);
     }
 
-    private void executeADD() {
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+    private void executeADD(int operand) {
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
 
         CPUEngine.getInstance().useALU(Instruction.ADD);
     }
 
-    private void executeLDA() {
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        int data = CPUEngine.getInstance().getMemoryData(address);
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
-
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
+    private void executeLDA(int operand) {
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, operand);
     }
 
-    private void executeSTA() {
+    private void executeSTA(int operandAddress) {
         int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        CPUEngine.getInstance().setMemoryData(address, data);
+        CPUEngine.getInstance().setMemoryData(operandAddress, data);
     }
 
     private void executeBUN() {

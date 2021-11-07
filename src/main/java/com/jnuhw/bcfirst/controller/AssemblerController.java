@@ -1,9 +1,9 @@
 package com.jnuhw.bcfirst.controller;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
-import com.jnuhw.bcfirst.domain.assembler.Parser;
-import com.jnuhw.bcfirst.domain.assembler.Executor;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Assembler.Parser;
+import com.jnuhw.bcfirst.domain.Assembler.Executor;
 import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.List;

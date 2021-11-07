@@ -1,8 +1,0 @@
-
-1
-java:S3626m"Remove this redundant jump.(ûÁİ…
-Y
-java:S1128">Remove this unused import 'com.jnuhw.bcfirst.view.OutputView'.(ç€Âÿÿÿÿÿ
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÕÛ°‹
-S
-java:S3655ˆ"7Call "Optional#isPresent()" before accessing the value.(¶óÿÿÿÿÿ

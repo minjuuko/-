@@ -1,7 +1,7 @@
-package com.jnuhw.bcfirst.domain.assembler;
+package com.jnuhw.bcfirst.domain.Assembler;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
-import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
 
 import java.util.*;
 

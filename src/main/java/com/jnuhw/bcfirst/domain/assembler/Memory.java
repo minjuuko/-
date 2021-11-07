@@ -1,4 +1,4 @@
-package com.jnuhw.bcfirst.domain.assembler;
+package com.jnuhw.bcfirst.domain.Assembler;
 
 import java.util.ArrayList;
 import java.util.List;

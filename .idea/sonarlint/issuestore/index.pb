@@ -19,9 +19,5 @@ o
 0src/main/java/com/jnuhw/bcfirst/Application.java,7/e/7ec0a929a2c5706555a294ae93aefc42a2fa02ae
 l
 <src/main/java/com/jnuhw/bcfirst/domain/Cpu/RegisterType.java,f/f/ff67e3db0310e046e3267dee52139b15af835258
-l
-<src/main/java/com/jnuhw/bcfirst/domain/Assembler/Parser.java,3/b/3b6ed44a20d46a288dc8faf2c0d5bafb1a83514d
 d
 4src/main/java/com/jnuhw/bcfirst/view/OutputView.java,b/4/b4602259e0c6c8a25c2faaf07eea9f185ebcce2a
-s
-Csrc/main/java/com/jnuhw/bcfirst/controller/AssemblerController.java,3/d/3d40cf51a02ee7c5b194827177d22b36d8d78959
