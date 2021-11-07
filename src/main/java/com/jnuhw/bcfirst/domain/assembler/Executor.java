@@ -42,16 +42,16 @@ public class Executor {
             switch (instruction) {
                 // MRI Instruction
                 case AND:
-                    executeAND(operand);
+                    executeAND(operandAddress, isInDirect);
                     break;
                 case ADD:
-                    executeADD(operand);
+                    executeADD(operandAddress, isInDirect);
                     break;
                 case LDA:
-                    executeLDA(operand);
+                    executeLDA(operandAddress, isInDirect);
                     break;
                 case STA:
-                    executeSTA(operandAddress);
+                    executeSTA(operandAddress, isInDirect);
                     break;
                 case BUN:
                     executeBUN(operandAddress, isInDirect);
@@ -123,26 +123,62 @@ public class Executor {
         }
     }
 
-    private void executeAND(int operand) {
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
+    private void setARWithOperand(int operandAddress, boolean isIndirect) {
+        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
+        if (isIndirect) {
+            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
+        }
+    }
+
+    private void executeAND(int operandAddress, boolean isIndirect) {
+
+        // AR <- Operand
+        setARWithOperand(operandAddress, isIndirect);
+
+        // DR <- M[AR]
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
 
         CPUEngine.getInstance().useALU(Instruction.AND);
     }
 
-    private void executeADD(int operand) {
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
+    private void executeADD(int operandAddress, boolean isIndirect) {
+
+        // AR <- Operand
+        setARWithOperand(operandAddress, isIndirect);
+
+        // DR <- M[AR]
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
 
         CPUEngine.getInstance().useALU(Instruction.ADD);
     }
 
-    private void executeLDA(int operand) {
-        CPUEngine.getInstance().setRegisterData(RegisterType.DR, operand);
-        CPUEngine.getInstance().setRegisterData(RegisterType.AC, operand);
+    private void executeLDA(int operandAddress, boolean isIndirect) {
+
+        // AR <- Operand
+        setARWithOperand(operandAddress, isIndirect);
+
+        // DR <- M[AR]
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+
+        // AC <- DR
+        CPUEngine.getInstance().setRegisterData(RegisterType.AC, data);
     }
 
-    private void executeSTA(int operandAddress) {
+    private void executeSTA(int operandAddress, boolean isIndirect) {
+
+        // AR <- Operand
+        setARWithOperand(operandAddress, isIndirect);
+
         int data = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
-        CPUEngine.getInstance().setMemoryData(operandAddress, data);
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        CPUEngine.getInstance().setMemoryData(address, data);
     }
 
 
@@ -151,11 +187,7 @@ public class Executor {
     private void executeBUN(int operandAddress, boolean isIndirect) {
 
         // AR <- Operand
-        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
-        if (isIndirect) {
-            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
-            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
-        }
+        setARWithOperand(operandAddress, isIndirect);
 
         // PC <- AR
         int arData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
@@ -165,11 +197,7 @@ public class Executor {
     private void executeBSA(int operandAddress, boolean isIndirect) {
 
         // AR <- Operand
-        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
-        if (isIndirect) {
-            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
-            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
-        }
+        setARWithOperand(operandAddress, isIndirect);
 
         // M[AR] <- PC
         int arAddress = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
@@ -187,11 +215,7 @@ public class Executor {
     private void executeISZ(int operandAddress, boolean isIndirect) {
 
         // AR <- Operand
-        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
-        if (isIndirect) {
-            int inData = CPUEngine.getInstance().getMemoryData(operandAddress);
-            CPUEngine.getInstance().setRegisterData(RegisterType.AR, inData);
-        }
+        setARWithOperand(operandAddress, isIndirect);
 
         // DR <- M[AR]
         int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
