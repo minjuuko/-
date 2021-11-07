@@ -93,6 +93,9 @@ public class Executor {
                 case SZA:
                     executeSZA();
                     break;
+                case SZE:
+                executeSZA();
+                    break;
                 case HLT:
                     return;
 
@@ -180,15 +183,65 @@ public class Executor {
 
     }
 
-    private void executeSPA() {
+     private void executeSPA() {
+    	int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+    	char arr[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'}; // AC를 2진수 형태로 저장할 배열
+    	for(int i = 15; i >= 0 ; i--) {
+    		if((acData&(1<<i))==0)
+    			arr[15-i]= '0';
+    		else
+    			arr[15-i]='1';
+    		}
+    	//AC를 2진수로 변환
+    	if(arr[0]==0) //if(AC<0)
+    	{  
+            int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+            pcData +=1; //PC+1
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,pcData);    //PC<-PC+1
+            
+          //System.out.println("PC : "+pcData);
+        }
 
     }
-
     private void executeSNA() {
-
+    	int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+    	char arr[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    	for(int i = 15; i >= 0 ; i--) {
+    		if((acData&(1<<i))==0)
+    			arr[15-i]= '0';
+    		else
+    			arr[15-i]='1';
+    		}
+    	if(arr[0]==1)
+    	{  //if(AC<0)
+            int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+            pcData +=1; //PC+1
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,pcData);    //PC<-PC+1
+            //System.out.println("PC : "+pcData);
+        }
+    	
     }
 
     private void executeSZA() {
+    	int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+  
+        if(acData==0){  //if(AC = 0)
+            int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+            pcData +=1; //PC+1
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,pcData);    //PC<-PC+1
+            //System.out.println("PC : "+pcData);
+        }
+    
+    }
+
+    private void executeSZE() {
+    	int eData = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+    	if(eData==0){  //if(E=0)
+            int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
+            pcData +=1; //PC+1
+            CPUEngine.getInstance().setRegisterData(RegisterType.PC,pcData);    //PC<-PC+1
+            //System.out.println("PC : "+pcData);
+        }
 
     }
 
