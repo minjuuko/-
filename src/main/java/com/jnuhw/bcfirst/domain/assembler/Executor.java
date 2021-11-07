@@ -255,7 +255,7 @@ public class Executor {
     }
 
     private void executeCIR() {
-        String acBinaryData = Utility.toFormatBinaryString(cpuEngine.getRegisterData(RegisterType.AC));
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, cpuEngine.getRegisterData(RegisterType.AC));
         int topBit = Character.getNumericValue(acBinaryData.charAt(acBinaryData.length() - 1));
         int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
 
@@ -266,7 +266,7 @@ public class Executor {
     }
 
     private void executeCIL() {
-        String acBinaryData = Utility.toFormatBinaryString(cpuEngine.getRegisterData(RegisterType.AC));
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, cpuEngine.getRegisterData(RegisterType.AC));
         int topBit = Character.getNumericValue(acBinaryData.charAt(0));
         int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
 
@@ -285,7 +285,7 @@ public class Executor {
 
     private void executeSPA() {
         int acData = cpuEngine.getRegisterData(RegisterType.AC); // AC값 acData에 저장
-        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, acData);
 
         //if(AC<0)
         if (acBinaryData.charAt(0) == 0) {
@@ -297,7 +297,7 @@ public class Executor {
 
     private void executeSNA() {
         int acData = cpuEngine.getRegisterData(RegisterType.AC); // AC값 acData에 저장
-        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, acData);
 
         //if(AC<0)
         if (acBinaryData.charAt(0) == 1) {
@@ -337,10 +337,10 @@ public class Executor {
 
         // AC(0-7) <- INPR
         int inprData = cpuEngine.getRegisterData(RegisterType.INPR);
-        String inprBinaryData = Utility.toFormatBinaryString(inprData);
+        String inprBinaryData = Utility.toFormatBinaryString(RegisterType.INPR, inprData);
 
         int acData = cpuEngine.getRegisterData(RegisterType.AC);
-        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, acData);
         String newAcBinaryData = acBinaryData.substring(0, acBinaryData.length() - 8) + inprBinaryData;
         int newAcData = Integer.parseInt(newAcBinaryData, 2);
         cpuEngine.setRegisterData(RegisterType.AC, newAcData);
@@ -354,7 +354,7 @@ public class Executor {
 
         // OUTR <- AC(0-7)
         int acData = cpuEngine.getRegisterData(RegisterType.AC);
-        String acBinaryData = Utility.toFormatBinaryString(acData);
+        String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, acData);
         String dividedAcBinaryData = acBinaryData.substring(acBinaryData.length() - 8);
         int dividedAcData = Integer.parseInt(dividedAcBinaryData, 2);
 
