@@ -21,18 +21,19 @@ public class Executor {
         engine.setRegisterData(RegisterType.PC, startLc);
 
         while (true) {
-            int memoryData = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
+            int instructionDataInMemory = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
+            engine.increaseRegister(RegisterType.PC);
 
             // Instruction Information
-            int InstructionHexCode = memoryData;
+            int InstructionHexCode = instructionDataInMemory;
             int operand = 0;
-            int oprandAddress = 0;
+            int operandAddress = 0;
             boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
             boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
             if (isMri) {
-                InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(memoryData);
-                oprandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(memoryData);
-                operand = engine.getMemoryData(oprandAddress);
+                InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(instructionDataInMemory);
+                operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
+                operand = engine.getMemoryData(operandAddress);
             }
 
             int _instructionHexCode = InstructionHexCode;
@@ -50,16 +51,16 @@ public class Executor {
                     executeLDA(operand);
                     break;
                 case STA:
-                    executeSTA(oprandAddress);
+                    executeSTA(operandAddress);
                     break;
                 case BUN:
-                    executeBUN();
+                    executeBUN(operandAddress, isInDirect);
                     break;
                 case BSA:
-                    executeBSA();
+                    executeBSA(operandAddress, isInDirect);
                     break;
                 case ISZ:
-                    executeISZ();
+                    executeISZ(operandAddress, isInDirect);
                     break;
 
                 // Register Instruction
@@ -119,10 +120,6 @@ public class Executor {
                 default:
                     break;
             }
-
-            // END 명령어 판별 필요?
-
-            engine.increaseRegister(RegisterType.PC);
         }
     }
 
@@ -148,17 +145,71 @@ public class Executor {
         CPUEngine.getInstance().setMemoryData(operandAddress, data);
     }
 
-    private void executeBUN() {
 
+
+
+    private void executeBUN(int operandAddress, boolean isIndirect) {
+
+        // AR <- Operand
+        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
+        if (isIndirect) {
+            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
+        }
+
+        // PC <- AR
+        int arData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC, arData);
     }
 
-    private void executeBSA() {
+    private void executeBSA(int operandAddress, boolean isIndirect) {
 
+        // AR <- Operand
+        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
+        if (isIndirect) {
+            int indirectAddress = CPUEngine.getInstance().getMemoryData(operandAddress);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR, indirectAddress);
+        }
+
+        // M[AR] <- PC
+        int arAddress = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);
+        CPUEngine.getInstance().setMemoryData(arAddress, pcData);
+
+        // AR <- AR + 1
+        CPUEngine.getInstance().increaseRegister(RegisterType.AC);
+
+        // PC <- AR
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC);
+        CPUEngine.getInstance().setRegisterData(RegisterType.PC, acData);
     }
 
-    private void executeISZ() {
+    private void executeISZ(int operandAddress, boolean isIndirect) {
 
+        // AR <- Operand
+        CPUEngine.getInstance().setRegisterData(RegisterType.AR, operandAddress);
+        if (isIndirect) {
+            int inData = CPUEngine.getInstance().getMemoryData(operandAddress);
+            CPUEngine.getInstance().setRegisterData(RegisterType.AR, inData);
+        }
+
+        // DR <- M[AR]
+        int address = CPUEngine.getInstance().getRegisterData(RegisterType.AR);
+        int data = CPUEngine.getInstance().getMemoryData(address);
+        CPUEngine.getInstance().setRegisterData(RegisterType.DR, data);
+
+        // DR <- DR + 1
+        CPUEngine.getInstance().increaseRegister(RegisterType.DR);
+
+        // M[AR] <- DR
+        int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);
+        CPUEngine.getInstance().setMemoryData(address, drData);
+        if (drData == 0) {  //if(DR = 0)
+            CPUEngine.getInstance().increaseRegister(RegisterType.AR);
+        }
     }
+
+
 
     private void executeCLA() {
 

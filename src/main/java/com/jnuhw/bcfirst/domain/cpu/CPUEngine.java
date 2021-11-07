@@ -20,7 +20,7 @@ public class CPUEngine {
         flipflops = new HashMap<>();
 
         for(RegisterType registerType : RegisterType.values()) {
-            registers.put(registerType, new BitData(registerType.bitSize));
+            registers.put(registerType, new BitData(registerType.getBitSize(), registerType.isSigned()));
         }
 
         for(FlipFlopType flipFlopType : FlipFlopType.values()) {

@@ -1,8 +1,6 @@
 
 l
 <src/main/java/com/jnuhw/bcfirst/domain/Assembler/Memory.java,0/9/0952df70a9e376fdccaf3cf1e369d118d9cb5a5c
-m
-=src/main/java/com/jnuhw/bcfirst/domain/Assembler/BitData.java,1/9/19b633a58d9a2c606976cf51ec1f26b45b4a0a2a
 k
 ;src/main/java/com/jnuhw/bcfirst/domain/Assembler/Label.java,e/c/ecd3fd00b55e79d7934326f8ea198224dc85ad8a
 l
@@ -17,7 +15,3 @@ o
 ?src/main/java/com/jnuhw/bcfirst/domain/Assembler/LcCounter.java,4/3/43b9e302b0806ad363a1b312e27abc7cacd7e97f
 `
 0src/main/java/com/jnuhw/bcfirst/Application.java,7/e/7ec0a929a2c5706555a294ae93aefc42a2fa02ae
-l
-<src/main/java/com/jnuhw/bcfirst/domain/Cpu/RegisterType.java,f/f/ff67e3db0310e046e3267dee52139b15af835258
-d
-4src/main/java/com/jnuhw/bcfirst/view/OutputView.java,b/4/b4602259e0c6c8a25c2faaf07eea9f185ebcce2a
