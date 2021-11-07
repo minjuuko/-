@@ -52,7 +52,6 @@ public class Executor {
                     executeSTA();
                     break;
                 case BUN:
-                    //System.out.println(operand);
                     executeBUN(operand,isInDirect);
                     break;
                 case BSA:
@@ -146,12 +145,14 @@ public class Executor {
         if(isIndirect){     //간접주소
             int inData = CPUEngine.getInstance().getMemoryData(operand);    //M[AR]
             CPUEngine.getInstance().setRegisterData(RegisterType.AR,inData);
-            System.out.println("M[AR] :"+inData);
+            //System.out.println("M[AR] :"+inData);
         }   //AR <-M[AR]
 
-        int arData=CPUEngine.getInstance().getRegisterData(RegisterType.AR);
-        System.out.println("AR or M[AR]]:"+arData);
+        int arData=CPUEngine.getInstance().getRegisterData(RegisterType.AR);    //AR
+        //System.out.println("AR or M[AR]:"+arData);
         CPUEngine.getInstance().setRegisterData(RegisterType.PC,arData);    //PC <- AR
+        //int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);
+        //System.out.println("PC : "+pcData);
 
     }
 
@@ -166,9 +167,9 @@ public class Executor {
 
         int arData=CPUEngine.getInstance().getRegisterData(RegisterType.AR);
         int pcData = CPUEngine.getInstance().getRegisterData(RegisterType.PC);  //PC
-        //System.out.println("PC :"+pcData);
+        // System.out.println("PC :"+pcData);
         CPUEngine.getInstance().setMemoryData(arData,pcData);  //M[AR] <- PC
-        //System.out.println("M[AR] or M[M[AR]] :"+arData);
+        // System.out.println("M[AR] or M[M[AR]] :"+arData);
 
         arData +=1; // AR <- AR+1
         CPUEngine.getInstance().setRegisterData(RegisterType.PC,arData);    //PC <- AR
@@ -188,8 +189,8 @@ public class Executor {
 
         int arData=CPUEngine.getInstance().getRegisterData(RegisterType.AR);
         int data = CPUEngine.getInstance().getMemoryData(arData);
-        CPUEngine.getInstance().setRegisterData(RegisterType.AR,data);
-        int marData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);  //M[AR]
+        CPUEngine.getInstance().setRegisterData(RegisterType.AR,data); //M[AR]
+        int marData = CPUEngine.getInstance().getRegisterData(RegisterType.AR);   //marData = M[AR]
         //System.out.println("M[AR] or M[M[AR]]:"+marData);
         CPUEngine.getInstance().setRegisterData(RegisterType.DR,marData);  //DR<- M[AR]
 
