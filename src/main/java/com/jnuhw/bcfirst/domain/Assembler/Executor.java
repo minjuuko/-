@@ -174,7 +174,7 @@ public class Executor {
         arData +=1; // AR <- AR+1
         CPUEngine.getInstance().setRegisterData(RegisterType.PC,arData);    //PC <- AR
 
-        int pcData2 = CPUEngine.getInstance().getRegisterData(RegisterType.PC);
+        //int pcData2 = CPUEngine.getInstance().getRegisterData(RegisterType.PC);
         //System.out.println(pcData2);
      }
 
