@@ -96,6 +96,9 @@ public class Executor {
                 case SZA:
                     executeSZA();
                     break;
+                case SZE:
+                    executeSZE();
+                    break;
                 case HLT:
                     return;
 
@@ -184,8 +187,6 @@ public class Executor {
     }
 
 
-
-
     private void executeBUN(int operandAddress, boolean isIndirect) {
 
         // AR <- Operand
@@ -236,7 +237,6 @@ public class Executor {
     }
 
 
-
     private void executeCLA() {
 
     }
@@ -276,17 +276,57 @@ public class Executor {
         CPUEngine.getInstance().increaseRegister(RegisterType.AC);
     }
 
+
     private void executeSPA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinary = Utility.toFormatBinaryString(acData);
+
+        //AC를 2진수로 변환
+        if (acBinary.charAt(0) == 0) { //if(AC<0)
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+
+            //System.out.println("PC : "+pcData);
+        }
 
     }
 
     private void executeSNA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+        String acBinary = Utility.toFormatBinaryString(acData);
+
+        if (acBinary.charAt(0) == 1) {  //if(AC<0)
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+
+            //System.out.println("PC : "+pcData);
+        }
 
     }
 
     private void executeSZA() {
+        int acData = CPUEngine.getInstance().getRegisterData(RegisterType.AC); // AC값 acData에 저장
+
+        if (acData == 0) {  //if(AC = 0)
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+
+            //System.out.println("PC : "+pcData);
+        }
 
     }
+
+    private void executeSZE() {
+        int eData = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+        if (eData == 0) {  //if(E=0)
+            //PC<-PC+1
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
+
+            //System.out.println("PC : "+pcData);
+        }
+
+    }
+
 
     private void executeINP() {
 
