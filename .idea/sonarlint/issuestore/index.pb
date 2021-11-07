@@ -13,5 +13,3 @@ p
 @src/main/java/com/jnuhw/bcfirst/UnknownInstructionException.java,f/0/f0b14bf6771983b63d55a5815b27f01abc28228f
 o
 ?src/main/java/com/jnuhw/bcfirst/domain/Assembler/LcCounter.java,4/3/43b9e302b0806ad363a1b312e27abc7cacd7e97f
-`
-0src/main/java/com/jnuhw/bcfirst/Application.java,7/e/7ec0a929a2c5706555a294ae93aefc42a2fa02ae

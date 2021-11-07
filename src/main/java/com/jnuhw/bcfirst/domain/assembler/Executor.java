@@ -1,7 +1,9 @@
 package com.jnuhw.bcfirst.domain.Assembler;
 
 import com.jnuhw.bcfirst.domain.Cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.Cpu.FlipFlopType;
 import com.jnuhw.bcfirst.domain.Cpu.RegisterType;
+import com.jnuhw.bcfirst.domain.Utility;
 
 import java.util.Arrays;
 
@@ -252,15 +254,32 @@ public class Executor {
     }
 
     private void executeCIR() {
+        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinary.charAt(acBinary.length() - 1));
+        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
+
+        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinary = eBit + acBinary.substring(0, acBinary.length() - 1);
+
+        System.out.println(CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E));
+        System.out.println(newAcBinary);
 
     }
 
     private void executeCIL() {
+        String acBinary = Utility.toFormatBinaryString(CPUEngine.getInstance().getRegisterData(RegisterType.AC));
+        int topBit = Character.getNumericValue(acBinary.charAt(0));
+        int eBit = CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E);
 
+        CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
+        String newAcBinary = acBinary.substring(1) + eBit;
+
+        System.out.println(CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E));
+        System.out.println(newAcBinary);
     }
 
     private void executeINC() {
-
+        CPUEngine.getInstance().increaseRegister(RegisterType.AC);
     }
 
     private void executeSPA() {
