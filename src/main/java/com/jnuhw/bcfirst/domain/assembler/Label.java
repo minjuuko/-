@@ -8,6 +8,11 @@ public class Label {
     private int lc;
     private int data;
 
+    public Label(String name, int lc) { // For not (hex, dec) variables
+        this.name = name;
+        this.lc = lc;
+    }
+
     public Label(String name, int lc, int data) {
         this.name = name;
         this.lc = lc;

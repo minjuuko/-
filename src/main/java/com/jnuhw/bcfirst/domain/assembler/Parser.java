@@ -23,15 +23,14 @@ public class Parser {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
-            if(isLabelInstruction(instruction)) instruction = args.get(1);
-
-            if (instruction.equals("DEC") || instruction.equals("HEX")) {
+            if(isLabelInstruction(instruction)) {
                 addSymbolTable(args);
-            }
+            } else {
 
-            if (instruction.equals("ORG")) {
-                executeORG(Integer.parseInt(args.get(1)));
-                continue;
+                if (instruction.equals("ORG")) {
+                    executeORG(Integer.parseInt(args.get(1)));
+                    continue;
+                }
             }
 
             lcCounter.increaseLc();
@@ -70,8 +69,10 @@ public class Parser {
 
         if (instruction.equals("HEX")) {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
-        } else {
+        } else if (instruction.equals("DEC")){
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
+        } else {
+            addressLabelTable.add(new Label(label, lcCounter.getCurrentLc()));
         }
 
     }
@@ -87,7 +88,11 @@ public class Parser {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
-            if(isLabelInstruction(instruction)) instruction = args.get(1);
+            boolean isLabeled = false;
+            if(isLabelInstruction(instruction)){
+                instruction = args.get(1);
+                isLabeled = true;
+            }
 
             if (isPseudoInstruction(instruction)) {
                 executePseudoInstruction(args);
@@ -95,7 +100,7 @@ public class Parser {
 
             } else {
                 try {
-                    executeNonPseudoInstruction(args);
+                    executeNonPseudoInstruction(args, isLabeled);
                 } catch (IllegalArgumentException e) {
                     throw new UnknownInstructionException("알 수 없는 Instruction을 발견 : " + command);
                 }
@@ -127,17 +132,17 @@ public class Parser {
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), true, label.getData());
     }
 
-    private void executeNonPseudoInstruction(List<String> args) throws IllegalArgumentException {
+    private void executeNonPseudoInstruction(List<String> args, boolean isLabeled) throws IllegalArgumentException {
         boolean isIndirect = false;
-        if (args.size() == 3 && args.get(2).equals("I")) {
+        if (args.size() >= 3 && args.get(args.size()-1).equals("I")) {
             isIndirect = true;
         }
 
-        Instruction instruction = Instruction.valueOf(args.get(0));
+        Instruction instruction = Instruction.valueOf(args.get(isLabeled ? 1 : 0));
         instruction.setIsInDirect(isIndirect);
         int instructionHexCode = instruction.getHexaCode();
         if (instruction.isMri()) {
-            instructionHexCode += getLabelByName(args.get(1)).getLc();
+            instructionHexCode += getLabelByName(args.get(isLabeled ? 2 : 1)).getLc();
         }
 
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
