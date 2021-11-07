@@ -23,6 +23,7 @@ public class Executor {
         while (true) {
             int instructionDataInMemory = engine.getMemoryData(engine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
             engine.increaseRegister(RegisterType.PC);
+            engine.setRegisterData(RegisterType.IR, instructionDataInMemory);
 
             // Instruction Information
             int InstructionHexCode = instructionDataInMemory;
@@ -229,14 +230,14 @@ public class Executor {
         int drData = CPUEngine.getInstance().getRegisterData(RegisterType.DR);
         CPUEngine.getInstance().setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            CPUEngine.getInstance().increaseRegister(RegisterType.AR);
+            CPUEngine.getInstance().increaseRegister(RegisterType.PC);
         }
     }
 
 
 
     private void executeCLA() {
-
+        CPUEngine.getInstance().clearRegister(RegisterType.AC);
     }
 
     private void executeCLE() {
