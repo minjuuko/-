@@ -261,9 +261,6 @@ public class Executor {
         CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
         String newAcBinary = eBit + acBinary.substring(0, acBinary.length() - 1);
 
-        System.out.println(CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E));
-        System.out.println(newAcBinary);
-
     }
 
     private void executeCIL() {
@@ -273,9 +270,6 @@ public class Executor {
 
         CPUEngine.getInstance().setFlipFlopData(FlipFlopType.E, topBit);
         String newAcBinary = acBinary.substring(1) + eBit;
-
-        System.out.println(CPUEngine.getInstance().getFlipFlopData(FlipFlopType.E));
-        System.out.println(newAcBinary);
     }
 
     private void executeINC() {
