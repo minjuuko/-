@@ -246,12 +246,10 @@ public class Executor {
     }
 
     private void executeCMA() {
-        cpuEngine.setRegisterData(RegisterType.AC, 0X9999);
+
         int data = cpuEngine.getRegisterData(RegisterType.AC);
-        data = ~(data);
-        cpuEngine.setRegisterData(RegisterType.AC, data);
-        //int data1 = cpuEngine.getRegisterData(RegisterType.AC);
-        //System.out.println(data1);
+        int newAcData = ~(data);
+        cpuEngine.setRegisterData(RegisterType.AC, newAcData);
 
     }
     private void executeCME() {
