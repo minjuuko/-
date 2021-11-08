@@ -238,19 +238,30 @@ public class Executor {
 
 
     private void executeCLA() {
-
+        cpuEngine.setRegisterData(RegisterType.AC, 0);
     }
 
     private void executeCLE() {
-
+        cpuEngine.setFlipFlopData(FlipFlopType.E, 0);
     }
 
     private void executeCMA() {
+        cpuEngine.setRegisterData(RegisterType.AC, 0X9999);
+        int data = cpuEngine.getRegisterData(RegisterType.AC);
+        data = ~(data);
+        cpuEngine.setRegisterData(RegisterType.AC, data);
+        //int data1 = cpuEngine.getRegisterData(RegisterType.AC);
+        //System.out.println(data1);
 
     }
-
     private void executeCME() {
+        int data = cpuEngine.getFlipFlopData(FlipFlopType.E);
+        if(data == 0)
+            data = 1;
+        else
+            data = 0;
 
+        cpuEngine.setFlipFlopData(FlipFlopType.E, data);
     }
 
     private void executeCIR() {
