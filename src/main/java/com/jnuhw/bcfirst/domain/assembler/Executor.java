@@ -39,8 +39,11 @@ public class Executor {
             }
 
             int _instructionHexCode = InstructionHexCode;
-            Instruction instruction = Arrays.stream(Instruction.values()).filter(i -> i.getHexaCode() == _instructionHexCode).findAny().get();
+            Instruction instruction = Arrays.stream(Instruction.values())
+                    .filter(i -> i.getHexaCode() == _instructionHexCode)
+                    .findAny().get();
             instruction.setIsInDirect(isInDirect);
+
             switch (instruction) {
                 // MRI Instruction
                 case AND:
@@ -208,10 +211,10 @@ public class Executor {
         cpuEngine.setMemoryData(arAddress, pcData);
 
         // AR <- AR + 1
-        cpuEngine.increaseRegister(RegisterType.AC);
+        cpuEngine.increaseRegister(RegisterType.AR);
 
         // PC <- AR
-        int acData = cpuEngine.getRegisterData(RegisterType.AC);
+        int acData = cpuEngine.getRegisterData(RegisterType.AR);
         cpuEngine.setRegisterData(RegisterType.PC, acData);
     }
 
