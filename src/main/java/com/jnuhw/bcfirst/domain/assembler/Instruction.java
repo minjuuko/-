@@ -47,9 +47,9 @@ public enum Instruction {
     }
 
     public int getHexaCode() {
-        if (isInDirect) {
-            return hexaCode + INDIRECT_CODE;
-        }
+//        if (isInDirect) {
+//            return hexaCode + INDIRECT_CODE;
+//        }
 
         return hexaCode;
     }
