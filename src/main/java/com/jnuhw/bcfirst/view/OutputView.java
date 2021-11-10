@@ -45,8 +45,8 @@ public class OutputView {
         System.out.println("프로그램 실행 후, 저장된 데이터가 변경된 메모리 목록입니다.");
         for(int key : keys) {
             String message = "Memory[0x%s] data : 0x%s";
-            String keyHex = Integer.toHexString(key).toUpperCase(Locale.ROOT);
-            String valHex = Integer.toHexString(CPUEngine.getInstance().getMemoryData(key)).toUpperCase(Locale.ROOT);
+            String keyHex = keepLength(Integer.toHexString(key).toUpperCase(Locale.ROOT), 3);
+            String valHex = keepLength(Integer.toHexString(CPUEngine.getInstance().getMemoryData(key)).toUpperCase(Locale.ROOT), 4);
 
             System.out.println(String.format(message, keyHex, valHex));
         }
@@ -56,7 +56,7 @@ public class OutputView {
             String message = "%s[0-%d] : 0x%s";
             String regName = type.name();
             int regSize = type.getBitSize();
-            String regData = Integer.toHexString(CPUEngine.getInstance().getRegisterData(type)).toUpperCase(Locale.ROOT);
+            String regData = keepLength(Integer.toHexString(CPUEngine.getInstance().getRegisterData(type)).toUpperCase(Locale.ROOT), 4);
 
             System.out.println(String.format(message, regName, regSize-1, regData));
         }
@@ -73,5 +73,16 @@ public class OutputView {
         }
 
         return keys;
+    }
+
+    private static String keepLength(String val, int length) {
+        while(val.length() < length) {
+            val = "0" + val;
+        }
+        if(val.length() > length) {
+            val = val.substring(val.length()-length);
+        }
+
+        return val;
     }
 }
