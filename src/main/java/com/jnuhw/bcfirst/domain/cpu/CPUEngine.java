@@ -44,7 +44,8 @@ public class CPUEngine {
 
         switch(instruction) {
             case AND:
-                String binary = Integer.toBinaryString(drData & acData).substring(16);
+                String binary = Integer.toBinaryString(drData & acData);
+                if(binary.length() > 16) binary = binary.substring(binary.length()-16);
                 result = Integer.parseInt(binary, 2);
                 break;
             case ADD:
