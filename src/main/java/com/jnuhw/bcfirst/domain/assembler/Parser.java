@@ -139,11 +139,10 @@ public class Parser {
         }
 
         Instruction instruction = Instruction.valueOf(args.get(isLabeled ? 1 : 0));
-        instruction.setIsInDirect(isIndirect);
         int instructionHexCode = instruction.getHexaCode();
-        if (instruction.isMri()) {
-            instructionHexCode += getLabelByName(args.get(isLabeled ? 2 : 1)).getLc();
-        }
+
+        if (isIndirect) instructionHexCode += 0x8000;
+        if (instruction.isMri()) instructionHexCode += getLabelByName(args.get(isLabeled ? 2 : 1)).getLc();
 
         CPUEngine.getInstance().initializeMemoryData(lcCounter.getCurrentLc(), false, instructionHexCode);
     }

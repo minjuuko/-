@@ -25,7 +25,7 @@ public class BitData {
     }
 
     public void setData(int data) {
-        if (checkOverflow(data)) {
+        if (checkOverflowHex(data)) {
             return;
         }
 
@@ -37,7 +37,7 @@ public class BitData {
     }
 
     public void increase() {
-        if (checkOverflow(data + 1)) {
+        if (checkOverflowHex(data + 1)) {
             return;
         }
 
@@ -48,40 +48,49 @@ public class BitData {
         data = 0;
     }
 
-    private boolean checkOverflow(int value) {
-        if (isSigned && !checkSignedOverflow(value)) {
-            return false;
+    private boolean checkOverflowHex(int value) {
+        String hex = Integer.toHexString(value);
+        if(hex.length() > 4) {
+            hex = hex.substring(hex.length()-4);
         }
-
-        if (!isSigned && !checkUnsignedOverflow(value)) {
-            return false;
-        }
-
-        return true;
+        int decimal = Integer.parseInt(hex, 16);
+        return decimal > 0xFFFF;
     }
 
-    private boolean checkSignedOverflow(int value) {
-        int bitRange = bitSize - 1;
-        int minRange = -(int) Math.pow(2, bitRange);
-        int maxRange = (int) Math.pow(2, bitRange) - 1;
-
-        if (value < minRange || maxRange < value) {
-            OutputView.printDataOverflowError(value);
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean checkUnsignedOverflow(int value) {
-        int bitRange = bitSize;
-        int maxRange = (int) Math.pow(2, bitRange) - 1;
-
-        if (value < 0 || maxRange < value) {
-            OutputView.printDataOverflowError(value);
-            return true;
-        }
-
-        return false;
-    }
+//    private boolean checkOverflow(int value) {
+//        if (isSigned && !checkSignedOverflow(value)) {
+//            return false;
+//        }
+//
+//        if (!isSigned && !checkUnsignedOverflow(value)) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    private boolean checkSignedOverflow(int value) {
+//        int bitRange = bitSize - 1;
+//        int minRange = -(int) Math.pow(2, bitRange);
+//        int maxRange = (int) Math.pow(2, bitRange) - 1;
+//
+//        if (value < minRange || maxRange < value) {
+//            OutputView.printDataOverflowError(value);
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    private boolean checkUnsignedOverflow(int value) {
+//        int bitRange = bitSize;
+//        int maxRange = (int) Math.pow(2, bitRange) - 1;
+//
+//        if (value < 0 || maxRange < value) {
+//            OutputView.printDataOverflowError(value);
+//            return true;
+//        }
+//
+//        return false;
+//    }
 }
