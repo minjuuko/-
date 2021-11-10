@@ -59,7 +59,7 @@ public class InputView {
                 program.add("STA PT2");
                 program.add("ISZ MVE");
                 program.add("LDA MVE I");
-                program.add("STA CT R");
+                program.add("STA CTR");
                 program.add("ISZ MVE");
                 program.add("LOP, LDA PT1 I");
                 program.add("STA PT2 I");
