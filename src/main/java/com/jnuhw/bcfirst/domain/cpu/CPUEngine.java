@@ -44,7 +44,8 @@ public class CPUEngine {
 
         switch(instruction) {
             case AND:
-                result = Integer.parseInt(Integer.toBinaryString(drData & acData), 2);
+                String binary = Integer.toBinaryString(drData & acData).substring(16);
+                result = Integer.parseInt(binary, 2);
                 break;
             case ADD:
                 result = drData + acData;
