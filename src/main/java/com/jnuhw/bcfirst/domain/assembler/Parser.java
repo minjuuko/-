@@ -79,7 +79,7 @@ public class Parser {
 
 
     private void executeORG(int location) {
-        lcCounter.setLc(location);
+        lcCounter.setLc(Integer.parseInt(String.valueOf(location), 16));
     }
 
     public void parseSecondPass(List<String> program) throws UnknownInstructionException {
