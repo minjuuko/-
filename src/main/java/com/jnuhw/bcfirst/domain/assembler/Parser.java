@@ -64,7 +64,10 @@ public class Parser {
             label = args.get(0);
             label = label.substring(0, label.length() - 1);
             instruction = args.get(1);
-            data = args.get(2);
+
+            if(instruction.equals("HEX") || instruction.equals("DEC")) {
+                data = args.get(2);
+            }
         }
 
         if (instruction.equals("HEX")) {
