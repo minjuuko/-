@@ -241,17 +241,19 @@ public class Executor {
 
 
     private void executeCLA() {
+        //AC <- 0
         cpuEngine.setRegisterData(RegisterType.AC, 0);
     }
 
     private void executeCLE() {
+        //E <- 0
         cpuEngine.setFlipFlopData(FlipFlopType.E, 0);
     }
 
     private void executeCMA() {
 
         int data = cpuEngine.getRegisterData(RegisterType.AC);
-        int newAcData = ~(data);
+        int newAcData = ~(data); //Complement AC
         cpuEngine.setRegisterData(RegisterType.AC, newAcData);
 
     }
@@ -261,33 +263,34 @@ public class Executor {
             data = 1;
         else
             data = 0;
-
+        //Complement E
         cpuEngine.setFlipFlopData(FlipFlopType.E, data);
     }
 
     private void executeCIR() {
         String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, cpuEngine.getRegisterData(RegisterType.AC));
-        int topBit = Character.getNumericValue(acBinaryData.charAt(acBinaryData.length() - 1));
-        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
+        int topBit = Character.getNumericValue(acBinaryData.charAt(acBinaryData.length() - 1)); //AC(0)
+        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);  //E
 
-        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit);
-        String newAcBinaryData = eBit + acBinaryData.substring(0, acBinaryData.length() - 1);
+        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit); //E <- AC(0)
+        String newAcBinaryData = eBit + acBinaryData.substring(0, acBinaryData.length() - 1);    //AC <- shr AC, AC(15) <- E
         int newAcData = Integer.parseInt(newAcBinaryData, 2);
         cpuEngine.setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeCIL() {
         String acBinaryData = Utility.toFormatBinaryString(RegisterType.AC, cpuEngine.getRegisterData(RegisterType.AC));
-        int topBit = Character.getNumericValue(acBinaryData.charAt(0));
-        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E);
+        int topBit = Character.getNumericValue(acBinaryData.charAt(0)); //AC(15)
+        int eBit = cpuEngine.getFlipFlopData(FlipFlopType.E); //E
 
-        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit);
-        String newAcBinaryData = acBinaryData.substring(1) + eBit;
+        cpuEngine.setFlipFlopData(FlipFlopType.E, topBit); //E <- AC(15)
+        String newAcBinaryData = acBinaryData.substring(1) + eBit; //AC <- shr AC, AC(0) <- E
         int newAcData = Integer.parseInt(newAcBinaryData, 2);
         cpuEngine.setRegisterData(RegisterType.AC, newAcData);
     }
 
     private void executeINC() {
+        //AC <- AC+1
         cpuEngine.increaseRegister(RegisterType.AC);
     }
 
