@@ -235,7 +235,7 @@ public class Executor {
         int drData = cpuEngine.getRegisterData(RegisterType.DR);
         cpuEngine.setMemoryData(address, drData);
         if (drData == 0) {  //if(DR = 0)
-            cpuEngine.increaseRegister(RegisterType.PC);
+            cpuEngine.increaseRegister(RegisterType.PC);    //PC <- PC + 1
         }
     }
 
