@@ -1,6 +1,6 @@
 package com.jnuhw.bcfirst.domain.assembler;
 
-import com.jnuhw.bcfirst.UnknownInstructionException;
+import com.jnuhw.bcfirst.exception.UnknownInstructionException;
 import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
 import com.jnuhw.bcfirst.view.OutputView;
 
@@ -18,8 +18,6 @@ public class Parser {
             // 임의로 External Input-Output interrupt flag 도입
             if (args.get(args.size() - 1).equals("*IN*")) {
                 Interrupt.getInstance().addExternalInputTimings(lcCounter.getCurrentLc());
-                ////////////////////
-                System.out.println("*** parseLc " + lcCounter.getCurrentLc());
             }
             if (args.get(args.size() - 1).equals("*OUT*")) {
                 Interrupt.getInstance().addExternalOutputTimings(lcCounter.getCurrentLc());

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BasicComputer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BasicComputer_jar</output-path>
+    <root id="archive" name="BasicComputer.jar">
+      <element id="module-output" name="BasicComputer" />
+    </root>
+  </artifact>
+</component>

@@ -10,29 +10,31 @@ public class InputView {
 
     static Scanner scanner = new Scanner(System.in);
 
-    public static List<String> inputAssemblerProgram() {
-        List<String> program = new ArrayList<>();
-        String command;
-        do {
-            String code = scanner.nextLine().toUpperCase(Locale.ROOT);
-            if(code.startsWith("SUB")) {
-                program = addSubroutine(program, code.split(" ")[1]);
-            } else {
-                program.add(code);
-            }
-            command = code.split(" ")[0];
-        } while (!command.equals("END"));
-
-        return program;
-    }
+//    public static List<String> inputAssemblerProgram() {
+//        List<String> program = new ArrayList<>();
+//        String command;
+//        do {
+//            String code = scanner.nextLine().toUpperCase(Locale.ROOT);
+//            if(code.startsWith("SUB")) {
+//                program = addSubroutine(program, code.split(" ")[1]);
+//            } else {
+//                program.add(code);
+//            }
+//            command = code.split(" ")[0];
+//        } while (!command.equals("END"));
+//
+//        return program;
+//    }
 
     public static int inputStartLc() {
-        System.out.println("실행을 시작할 메모리 주소를 입력하세요 (제일 첫 주소는 0)");
+        System.out.println();
+        System.out.println(" > 실행을 시작할 메모리 주소를 입력하세요 (제일 첫 주소는 0)");
         return Integer.parseInt(scanner.nextLine());
     }
 
     public static String getExternalInput() {
-        System.out.println("외부 인터럽트를 통한 입력을 작성하세요 > ");
+        System.out.println();
+        System.out.println(" > 외부 인터럽트를 통한 입력을 작성하세요 > ");
         return scanner.nextLine();
     }
 

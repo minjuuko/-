@@ -2,14 +2,11 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 import com.jnuhw.bcfirst.view.OutputView;
 
-import java.util.Locale;
-
 public class BitData {
 
     private final int bitSize;
 
     private boolean isSigned;
-    // 데이터는 2진수로 관리되고, 계산되어야 하지만, 실제 저장값은 10진수
     private int data = 0;
 
     public BitData(int bitSize) {
@@ -27,7 +24,7 @@ public class BitData {
     }
 
     public void setData(int data) {
-        if (checkOverflowHex(data)) {
+        if (checkOverflow(data)) {
             OutputView.printDataOverflowError(data);
             return;
         }
@@ -40,7 +37,7 @@ public class BitData {
     }
 
     public void increase() {
-        if (checkOverflowHex(data + 1)) {
+        if (checkOverflow(data + 1)) {
             OutputView.printDataOverflowError(data+1);
             return;
         }
@@ -52,7 +49,7 @@ public class BitData {
         data = 0;
     }
 
-    private boolean checkOverflowHex(int value) {
+    private boolean checkOverflow(int value) {
         int data = value;
         int size = isSigned ? bitSize-1 : bitSize;
         int maxValue = (int) Math.pow(2, size) - 1;
@@ -70,41 +67,4 @@ public class BitData {
         else
             return data > maxValue && value < 0;
     }
-
-//    private boolean checkOverflow(int value) {
-//        if (isSigned && !checkSignedOverflow(value)) {
-//            return false;
-//        }
-//
-//        if (!isSigned && !checkUnsignedOverflow(value)) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    private boolean checkSignedOverflow(int value) {
-//        int bitRange = bitSize - 1;
-//        int minRange = -(int) Math.pow(2, bitRange);
-//        int maxRange = (int) Math.pow(2, bitRange) - 1;
-//
-//        if (value < minRange || maxRange < value) {
-//            OutputView.printDataOverflowError(value);
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
-//    private boolean checkUnsignedOverflow(int value) {
-//        int bitRange = bitSize;
-//        int maxRange = (int) Math.pow(2, bitRange) - 1;
-//
-//        if (value < 0 || maxRange < value) {
-//            OutputView.printDataOverflowError(value);
-//            return true;
-//        }
-//
-//        return false;
-//    }
 }

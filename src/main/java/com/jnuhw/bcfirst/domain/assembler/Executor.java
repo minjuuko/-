@@ -9,14 +9,6 @@ import com.jnuhw.bcfirst.view.OutputView;
 import java.util.Arrays;
 
 public class Executor {
-    private static Executor instance;
-    public static Executor getInstance() {
-        if (instance == null)
-            instance = new Executor();
-
-        return instance;
-    }
-
 
     private final CPUEngine cpuEngine = CPUEngine.getInstance();
 
@@ -30,7 +22,7 @@ public class Executor {
                 Interrupt.getInstance().executeInterruptCycle();
 
             } else {
-               executeInstructionCycle();
+                executeInstructionCycle();
             }
         }
     }
@@ -42,8 +34,6 @@ public class Executor {
         Interrupt.getInstance().checkInterruptFlags();
 
 
-        int a = cpuEngine.getRegisterData(RegisterType.PC);
-        /////////////////////////////
         int instructionDataInMemory = cpuEngine.getMemoryData(cpuEngine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
         cpuEngine.increaseRegister(RegisterType.PC);
 
@@ -65,12 +55,6 @@ public class Executor {
         Instruction instruction = Arrays.stream(Instruction.values())
                 .filter(i -> i.getHexaCode() == _instructionHexCode)
                 .findAny().orElse(Instruction.ETC);
-
-
-        //////////////////////
-        System.out.println(a+"] "+ instruction.name() + " " + Integer.toHexString(InstructionHexCode) + " - " + operandAddress);
-        //
-
         switch (instruction) {
             // MRI Instruction
             case AND:

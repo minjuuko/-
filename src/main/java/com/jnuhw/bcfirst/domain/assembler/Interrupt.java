@@ -4,7 +4,6 @@ import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
 import com.jnuhw.bcfirst.domain.cpu.FlipFlopType;
 import com.jnuhw.bcfirst.domain.cpu.RegisterType;
 import com.jnuhw.bcfirst.view.InputView;
-import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public class Interrupt {
     public void executeInterruptCycle() {
         // M[0] <- PC
         int pcData = cpuEngine.getRegisterData(RegisterType.PC);
-        System.out.println("*** returnPc " + pcData); //////////////////////
          cpuEngine.setMemoryData(0, pcData);
 
          // PC <- 1
@@ -65,8 +63,6 @@ public class Interrupt {
             return;
         }
 
-/////////////////
-        System.out.println("**** currentPc "+currentPc);
         String input = InputView.getExternalInput();
         cpuEngine.setRegisterData(RegisterType.INPR, Integer.parseInt(input));
 

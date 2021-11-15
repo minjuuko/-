@@ -30,7 +30,7 @@ public class CPUEngine {
         }
 
         for(FlipFlopType flipFlopType : FlipFlopType.values()) {
-            flipflops.put(flipFlopType, new BitData(1));
+            flipflops.put(flipFlopType, new BitData(1, false));
         }
 
     }

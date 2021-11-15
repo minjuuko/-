@@ -1,7 +1,9 @@
 package com.jnuhw.bcfirst.view;
 
+import com.jnuhw.bcfirst.domain.Utility;
 import com.jnuhw.bcfirst.domain.assembler.Memory;
 import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.domain.cpu.FlipFlopType;
 import com.jnuhw.bcfirst.domain.cpu.RegisterType;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class OutputView {
     }
 
     public static void printOutput(int data) {
-        System.out.println("Output : " + data);
+        System.out.println("[ OUTPUT ] " + data);
     }
 
     public static void saveMemoryData() {
@@ -46,23 +48,35 @@ public class OutputView {
     public static void printResultView() {
         List<Integer> keys = findChangedMemories();
 
-        System.out.println("프로그램 실행 후, 저장된 데이터가 변경된 메모리 목록입니다.");
+        System.out.println();
+        System.out.println();
+        System.out.println("[ 실행 결과 ]");
+        System.out.println("선언된 데이터 중 변경된 메모리 목록");
         for(int key : keys) {
             String message = "Memory[0x%s] data : 0x%s";
-            String keyHex = keepLength(Integer.toHexString(key).toUpperCase(Locale.ROOT), 3);
-            String valHex = keepLength(Integer.toHexString(CPUEngine.getInstance().getMemoryData(key)).toUpperCase(Locale.ROOT), 4);
+            String keyHex = Utility.toFormatHexString(4, key).toUpperCase(Locale.ROOT);
+            String valHex = Utility.toFormatHexString(4, CPUEngine.getInstance().getMemoryData(key)).toUpperCase(Locale.ROOT);
 
             System.out.println(String.format(message, keyHex, valHex));
         }
 
-        System.out.println("\n프로그램 종료 시점 레지스터의 상태입니다.");
+        System.out.println("\n프로그램 종료 시점 레지스터의 상태");
         for(RegisterType type : RegisterType.values()) {
             String message = "%s[0-%d] : 0x%s";
-            String regName = type.name();
-            int regSize = type.getBitSize();
-            String regData = keepLength(Integer.toHexString(CPUEngine.getInstance().getRegisterData(type)).toUpperCase(Locale.ROOT), 4);
+            String name = type.name();
+            int size = type.getBitSize();
+            String data = Utility.toFormatHexString(4, CPUEngine.getInstance().getRegisterData(type)).toUpperCase(Locale.ROOT);
 
-            System.out.println(String.format(message, regName, regSize-1, regData));
+            System.out.println(String.format(message, name, size-1, data));
+        }
+
+        System.out.println("\n프로그램 종료 시점 플립플롭의 상태");
+        for(FlipFlopType type : FlipFlopType.values()) {
+            String message = "%s : 0x%s";
+            String name = type.name();
+            String data = Utility.toFormatHexString(4, CPUEngine.getInstance().getFlipFlopData(type)).toUpperCase(Locale.ROOT);
+
+            System.out.println(String.format(message, name, data));
         }
     }
 
@@ -77,16 +91,5 @@ public class OutputView {
         }
 
         return keys;
-    }
-
-    private static String keepLength(String val, int length) {
-        while(val.length() < length) {
-            val = "0" + val;
-        }
-        if(val.length() > length) {
-            val = val.substring(val.length()-length);
-        }
-
-        return val;
     }
 }
