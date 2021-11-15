@@ -2,7 +2,7 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 public class LcCounter {
 
-    public static final int DEFAULT_LC = 1;
+    public static final int DEFAULT_LC = 0;
 
     private int lc;
 

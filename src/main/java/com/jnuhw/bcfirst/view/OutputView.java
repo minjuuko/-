@@ -30,6 +30,10 @@ public class OutputView {
         System.out.println("overflow 가 발생하였습습니다. data=" + data);
     }
 
+    public static void printOutput(int data) {
+        System.out.println("Output : " + data);
+    }
+
     public static void saveMemoryData() {
         prevMemoryDatas = new HashMap<>();
 

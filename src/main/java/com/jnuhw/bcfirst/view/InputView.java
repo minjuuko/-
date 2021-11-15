@@ -26,6 +26,20 @@ public class InputView {
         return program;
     }
 
+    public static int inputStartLc() {
+        System.out.println("실행을 시작할 메모리 주소를 입력하세요 (제일 첫 주소는 0)");
+        return Integer.parseInt(scanner.nextLine());
+    }
+
+    public static String getExternalInput() {
+        System.out.println("외부 인터럽트를 통한 입력을 작성하세요 > ");
+        return scanner.nextLine();
+    }
+
+
+    /*
+        Subroutine Debuging용 자동입력 메소드
+     */
     private static List<String> addSubroutine(List<String> program, String key) {
         switch(key) {
             case "SH4":

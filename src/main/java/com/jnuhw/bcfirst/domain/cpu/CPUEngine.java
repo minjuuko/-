@@ -7,8 +7,14 @@ import com.jnuhw.bcfirst.domain.assembler.Memory;
 import java.util.HashMap;
 
 public class CPUEngine {
-
     private static CPUEngine instance;
+    public static CPUEngine getInstance() {
+        if (instance == null) {
+            instance = new CPUEngine();
+        }
+
+        return instance;
+    }
 
 
     private final HashMap<RegisterType, BitData> registers;
@@ -27,14 +33,6 @@ public class CPUEngine {
             flipflops.put(flipFlopType, new BitData(1));
         }
 
-    }
-
-    public static CPUEngine getInstance() {
-        if (instance == null) {
-            instance = new CPUEngine();
-        }
-
-        return instance;
     }
 
     public void useALU(Instruction instruction) {

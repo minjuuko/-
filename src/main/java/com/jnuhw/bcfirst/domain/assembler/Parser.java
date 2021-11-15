@@ -2,31 +2,35 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 import com.jnuhw.bcfirst.UnknownInstructionException;
 import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
+import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.*;
 
 public class Parser {
 
-    private LcCounter lcCounter = new LcCounter();
-    private List<Label> addressLabelTable = new ArrayList<>();
-
-    public int getStartLc(String firstLine) {
-        List<String> args = Arrays.asList(firstLine.split(" "));
-        if (args.get(0).toLowerCase(Locale.ROOT).equals("ORG")) {
-            return Integer.parseInt(args.get(1));
-        }
-
-        return 1;
-    }
+    private final LcCounter lcCounter = new LcCounter();
+    private final List<Label> addressLabelTable = new ArrayList<>();
 
     public void parseFirstPass(List<String> program) throws UnknownInstructionException {
         for (String command : program) {
             List<String> args = Arrays.asList(command.split(" "));
-            String instruction = args.get(0);
-            if(isLabelInstruction(instruction) || instruction.equals("DEC") || instruction.equals("HEX")) {
-                addSymbolTable(args);
-            } else {
 
+            // 임의로 External Input-Output interrupt flag 도입
+            if (args.get(args.size() - 1).equals("*IN*")) {
+                Interrupt.getInstance().addExternalInputTimings(lcCounter.getCurrentLc());
+                ////////////////////
+                System.out.println("*** parseLc " + lcCounter.getCurrentLc());
+            }
+            if (args.get(args.size() - 1).equals("*OUT*")) {
+                Interrupt.getInstance().addExternalOutputTimings(lcCounter.getCurrentLc());
+            }
+            //
+
+            String instruction = args.get(0);
+            if (isLabelInstruction(instruction) || instruction.equals("DEC") || instruction.equals("HEX")) {
+                addSymbolTable(args);
+
+            } else {
                 if (instruction.equals("ORG")) {
                     executeORG(Integer.parseInt(args.get(1)));
                     continue;
@@ -60,19 +64,19 @@ public class Parser {
         String instruction = args.get(0);
         String data = args.get(1);
 
-        if(isLabelInstruction(args.get(0))) {
+        if (isLabelInstruction(args.get(0))) {
             label = args.get(0);
             label = label.substring(0, label.length() - 1);
             instruction = args.get(1);
 
-            if(instruction.equals("HEX") || instruction.equals("DEC")) {
+            if (instruction.equals("HEX") || instruction.equals("DEC")) {
                 data = args.get(2);
             }
         }
 
         if (instruction.equals("HEX")) {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data, 16)));
-        } else if (instruction.equals("DEC")){
+        } else if (instruction.equals("DEC")) {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc(), Integer.parseInt(data)));
         } else {
             addressLabelTable.add(new Label(label, lcCounter.getCurrentLc()));
@@ -81,8 +85,8 @@ public class Parser {
     }
 
 
-    private void executeORG(int location) {
-        lcCounter.setLc(Integer.parseInt(String.valueOf(location), 16));
+    private void executeORG(int lc) {
+        lcCounter.setLc(lc);
     }
 
     public void parseSecondPass(List<String> program) throws UnknownInstructionException {
@@ -92,7 +96,7 @@ public class Parser {
             List<String> args = Arrays.asList(command.split(" "));
             String instruction = args.get(0);
             boolean isLabeled = false;
-            if(isLabelInstruction(instruction)){
+            if (isLabelInstruction(instruction)) {
                 instruction = args.get(1);
                 isLabeled = true;
             }
@@ -101,11 +105,11 @@ public class Parser {
                 executePseudoInstruction(args);
                 if (instruction.equals("ORG")) continue;
 
-            } else {
+            } else if (!isEmptyLabel(args)) {
                 try {
                     executeNonPseudoInstruction(args, isLabeled);
                 } catch (IllegalArgumentException e) {
-                    throw new UnknownInstructionException("알 수 없는 Instruction을 발견 : " + command);
+                    OutputView.printUnknownInstructionError(lcCounter.getCurrentLc(), command);
                 }
             }
 
@@ -113,11 +117,19 @@ public class Parser {
         }
     }
 
+    private boolean isEmptyLabel(List<String> args) {
+        if (args.size() == 2 && args.get(0).contains(",") && args.get(1).equals("-")) {
+            return true;
+        }
+
+        return false;
+    }
+
     private void executePseudoInstruction(List<String> args) {
         String instruction = args.get(0);
-        if(isLabelInstruction(instruction)) instruction = args.get(1);
+        if (isLabelInstruction(instruction)) instruction = args.get(1);
 
-        switch(instruction) {
+        switch (instruction) {
             case "END":
                 return;
             case "ORG":
@@ -137,7 +149,7 @@ public class Parser {
 
     private void executeNonPseudoInstruction(List<String> args, boolean isLabeled) throws IllegalArgumentException {
         boolean isIndirect = false;
-        if (args.size() >= 3 && args.get(args.size()-1).equals("I")) {
+        if (args.size() >= 3 && args.get(2).equals("I")) {
             isIndirect = true;
         }
 

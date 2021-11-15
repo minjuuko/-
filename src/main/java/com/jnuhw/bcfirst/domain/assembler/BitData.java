@@ -12,7 +12,7 @@ public class BitData {
 
     public BitData(int bitSize) {
         this.bitSize = bitSize;
-        isSigned = false;
+        isSigned = true;
     }
 
     public BitData(int bitSize, boolean isSigned) {

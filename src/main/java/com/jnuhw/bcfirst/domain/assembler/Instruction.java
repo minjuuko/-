@@ -2,6 +2,8 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 public enum Instruction {
 
+    ETC(0, false),
+
     AND(0x0000, true),
     ADD(0x1000, true),
     LDA(0x2000, true),
@@ -74,7 +76,7 @@ public enum Instruction {
      * @return MRI Instruction Hexa Code
      */
     public static int getInstructionHexaCodeFromMemoryHexaCode(int memoryHexaCode) {
-        return memoryHexaCode - memoryHexaCode % 0x1000;
+        return memoryHexaCode - getDataHexaCodeFromMemoryHexaCode(memoryHexaCode);
     }
 
     /**

@@ -4,13 +4,12 @@ import com.jnuhw.bcfirst.domain.Utility;
 import com.jnuhw.bcfirst.domain.cpu.CPUEngine;
 import com.jnuhw.bcfirst.domain.cpu.FlipFlopType;
 import com.jnuhw.bcfirst.domain.cpu.RegisterType;
+import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.Arrays;
 
 public class Executor {
-
     private static Executor instance;
-
     public static Executor getInstance() {
         if (instance == null)
             instance = new Executor();
@@ -18,122 +17,153 @@ public class Executor {
         return instance;
     }
 
-    private CPUEngine cpuEngine = CPUEngine.getInstance();
+
+    private final CPUEngine cpuEngine = CPUEngine.getInstance();
+
+    private boolean isHLT = false;
 
     public void execute(int startLc) {
         cpuEngine.setRegisterData(RegisterType.PC, startLc);
 
-        while (true) {
-            int instructionDataInMemory = cpuEngine.getMemoryData(cpuEngine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
-            cpuEngine.increaseRegister(RegisterType.PC);
-            cpuEngine.setRegisterData(RegisterType.IR, instructionDataInMemory);
+        while (!isHLT) {
+            if (cpuEngine.getFlipFlopData(FlipFlopType.R) == 1) {
+                Interrupt.getInstance().executeInterruptCycle();
 
-            // Instruction Information
-            int InstructionHexCode = instructionDataInMemory;
-            int operandAddress = 0;
-            boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
-            boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
-            if (isMri) {
-                InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(instructionDataInMemory);
-                operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
-            }
-
-            int _instructionHexCode = isInDirect ? InstructionHexCode - Instruction.INDIRECT_CODE : InstructionHexCode;
-            Instruction instruction = Arrays.stream(Instruction.values())
-                    .filter(i -> i.getHexaCode() == _instructionHexCode)
-                    .findAny().get();
-            switch (instruction) {
-                // MRI Instruction
-                case AND:
-                    executeAND(operandAddress, isInDirect);
-                    break;
-                case ADD:
-                    executeADD(operandAddress, isInDirect);
-                    break;
-                case LDA:
-                    executeLDA(operandAddress, isInDirect);
-                    break;
-                case STA:
-                    executeSTA(operandAddress, isInDirect);
-                    break;
-                case BUN:
-                    executeBUN(operandAddress, isInDirect);
-                    break;
-                case BSA:
-                    executeBSA(operandAddress, isInDirect);
-                    break;
-                case ISZ:
-                    executeISZ(operandAddress, isInDirect);
-                    break;
-
-                // Register Instruction
-                case CLA:
-                    executeCLA();
-                    break;
-                case CLE:
-                    executeCLE();
-                    break;
-                case CMA:
-                    executeCMA();
-                    break;
-                case CME:
-                    executeCME();
-                    break;
-                case CIR:
-                    executeCIR();
-                    break;
-                case CIL:
-                    executeCIL();
-                    break;
-                case INC:
-                    executeINC();
-                    break;
-                case SPA:
-                    executeSPA();
-                    break;
-                case SNA:
-                    executeSNA();
-                    break;
-                case SZA:
-                    executeSZA();
-                    break;
-                case SZE:
-                    executeSZE();
-                    break;
-                case HLT:
-                    return;
-
-                // IO Instruction
-                case INP:
-                    executeINP();
-                    break;
-                case OUT:
-                    executeOUT();
-                    break;
-                case SKI:
-                    executeSKI();
-                    break;
-                case SKO:
-                    executeSKO();
-                    break;
-                case ION:
-                    executeION();
-                    break;
-                case IOF:
-                    executeIOF();
-                    break;
-                // Data
-                default:
-                    break;
+            } else {
+               executeInstructionCycle();
             }
         }
     }
 
+    private void executeInstructionCycle() {
+        // To execute Input/Output interrupt action
+        Interrupt.getInstance().checkExternalInput();
+        Interrupt.getInstance().checkExternalOutput();
+        Interrupt.getInstance().checkInterruptFlags();
+
+
+        int a = cpuEngine.getRegisterData(RegisterType.PC);
+        /////////////////////////////
+        int instructionDataInMemory = cpuEngine.getMemoryData(cpuEngine.getRegisterData(RegisterType.PC)); // M[PC]의 데이터 ( Instruction )
+        cpuEngine.increaseRegister(RegisterType.PC);
+
+        /*
+            Instruction Information
+         */
+        cpuEngine.setRegisterData(RegisterType.IR, instructionDataInMemory);
+        int InstructionHexCode = instructionDataInMemory;
+        int operandAddress = 0;
+        boolean isMri = Instruction.isMriHexCode(InstructionHexCode);
+        boolean isInDirect = Instruction.isIndirectHexaCode(InstructionHexCode);
+        if (isMri) {
+            InstructionHexCode = Instruction.getInstructionHexaCodeFromMemoryHexaCode(instructionDataInMemory);
+            operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
+        }
+
+
+        int _instructionHexCode = isInDirect ? InstructionHexCode - Instruction.INDIRECT_CODE : InstructionHexCode;
+        Instruction instruction = Arrays.stream(Instruction.values())
+                .filter(i -> i.getHexaCode() == _instructionHexCode)
+                .findAny().orElse(Instruction.ETC);
+
+
+        //////////////////////
+        System.out.println(a+"] "+ instruction.name() + " " + Integer.toHexString(InstructionHexCode) + " - " + operandAddress);
+        //
+
+        switch (instruction) {
+            // MRI Instruction
+            case AND:
+                executeAND(operandAddress, isInDirect);
+                break;
+            case ADD:
+                executeADD(operandAddress, isInDirect);
+                break;
+            case LDA:
+                executeLDA(operandAddress, isInDirect);
+                break;
+            case STA:
+                executeSTA(operandAddress, isInDirect);
+                break;
+            case BUN:
+                executeBUN(operandAddress, isInDirect);
+                break;
+            case BSA:
+                executeBSA(operandAddress, isInDirect);
+                break;
+            case ISZ:
+                executeISZ(operandAddress, isInDirect);
+                break;
+
+            // Register Instruction
+            case CLA:
+                executeCLA();
+                break;
+            case CLE:
+                executeCLE();
+                break;
+            case CMA:
+                executeCMA();
+                break;
+            case CME:
+                executeCME();
+                break;
+            case CIR:
+                executeCIR();
+                break;
+            case CIL:
+                executeCIL();
+                break;
+            case INC:
+                executeINC();
+                break;
+            case SPA:
+                executeSPA();
+                break;
+            case SNA:
+                executeSNA();
+                break;
+            case SZA:
+                executeSZA();
+                break;
+            case SZE:
+                executeSZE();
+                break;
+            case HLT:
+                executeHLT();
+                break;
+
+            // IO Instruction
+            case INP:
+                executeINP();
+                break;
+            case OUT:
+                executeOUT();
+                break;
+            case SKI:
+                executeSKI();
+                break;
+            case SKO:
+                executeSKO();
+                break;
+            case ION:
+                executeION();
+                break;
+            case IOF:
+                executeIOF();
+                break;
+            // Data
+            default:
+                break;
+        }
+    }
+
     private void setARWithOperand(int operandAddress, boolean isIndirect) {
-        cpuEngine.setRegisterData(RegisterType.AR, operandAddress);
         if (isIndirect) {
             int indirectAddress = cpuEngine.getMemoryData(operandAddress);
             cpuEngine.setRegisterData(RegisterType.AR, indirectAddress);
+        } else {
+            cpuEngine.setRegisterData(RegisterType.AR, operandAddress);
         }
     }
 
@@ -338,6 +368,10 @@ public class Executor {
         }
     }
 
+    private void executeHLT() {
+        isHLT = true;
+    }
+
 
 
 
@@ -370,6 +404,9 @@ public class Executor {
 
         // FGO <- 0
         cpuEngine.setFlipFlopData(FlipFlopType.FGO, 0);
+
+        // Print Output Character
+        OutputView.printOutput(cpuEngine.getRegisterData(RegisterType.OUTR));
     }
 
     private void executeSKI() {

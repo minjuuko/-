@@ -17,4 +17,9 @@ public class Utility {
         String format = "%" + formatSize + "s";
         return String.format(format, Integer.toBinaryString(data)).replace(' ', '0');
     }
+
+    public static String toFormatHexString(int formatSize, int data) {
+        String format = "%" + formatSize + "s";
+        return String.format(format, Integer.toHexString(data)).replace(' ', '0');
+    }
 }
