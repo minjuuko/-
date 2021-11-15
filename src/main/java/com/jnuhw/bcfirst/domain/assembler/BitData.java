@@ -2,6 +2,8 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 import com.jnuhw.bcfirst.view.OutputView;
 
+import java.util.Locale;
+
 public class BitData {
 
     private final int bitSize;
@@ -26,6 +28,7 @@ public class BitData {
 
     public void setData(int data) {
         if (checkOverflowHex(data)) {
+            OutputView.printDataOverflowError(data);
             return;
         }
 
@@ -38,6 +41,7 @@ public class BitData {
 
     public void increase() {
         if (checkOverflowHex(data + 1)) {
+            OutputView.printDataOverflowError(data+1);
             return;
         }
 
@@ -49,12 +53,22 @@ public class BitData {
     }
 
     private boolean checkOverflowHex(int value) {
-        String hex = Integer.toHexString(value);
-        if(hex.length() > 4) {
-            hex = hex.substring(hex.length()-4);
+        int data = value;
+        int size = isSigned ? bitSize-1 : bitSize;
+        int maxValue = (int) Math.pow(2, size) - 1;
+
+        int negCheck = maxValue / 2;
+        int posCheck = negCheck + 1;
+
+        if(isSigned) { // isSigned = true의 경우, 15비트만 검사하기 위해 [0] bit를 임의적으로 1로 세팅
+            if(data < 0) data = Math.abs(data - negCheck);
+            else data += posCheck;
         }
-        int decimal = Integer.parseInt(hex, 16);
-        return decimal > 0xFFFF;
+
+        if(isSigned)
+            return data > maxValue;
+        else
+            return data > maxValue && value < 0;
     }
 
 //    private boolean checkOverflow(int value) {
