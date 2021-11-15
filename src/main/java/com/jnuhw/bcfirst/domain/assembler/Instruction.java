@@ -34,23 +34,13 @@ public enum Instruction {
 
     private final int hexaCode;
     private final boolean isMri;
-    private boolean isInDirect;
 
     Instruction(int hexaCode, boolean isMri) {
         this.hexaCode = hexaCode;
         this.isMri = isMri;
-        this.isInDirect = false;
-    }
-
-    public void setIsInDirect(boolean isInDirect) {
-        this.isInDirect = isInDirect;
     }
 
     public int getHexaCode() {
-//        if (isInDirect) {
-//            return hexaCode + INDIRECT_CODE;
-//        }
-
         return hexaCode;
     }
 

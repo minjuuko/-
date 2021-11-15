@@ -38,12 +38,10 @@ public class Executor {
                 operandAddress = Instruction.getDataHexaCodeFromMemoryHexaCode(instructionDataInMemory);
             }
 
-            int _instructionHexCode = isInDirect ? InstructionHexCode-0x8000 : InstructionHexCode;
+            int _instructionHexCode = isInDirect ? InstructionHexCode - Instruction.INDIRECT_CODE : InstructionHexCode;
             Instruction instruction = Arrays.stream(Instruction.values())
                     .filter(i -> i.getHexaCode() == _instructionHexCode)
                     .findAny().get();
-            instruction.setIsInDirect(isInDirect);
-
             switch (instruction) {
                 // MRI Instruction
                 case AND:
