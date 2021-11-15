@@ -1,5 +1,8 @@
 package com.jnuhw.bcfirst.domain.assembler;
 
+/*
+ * 슈도/비슈도 명령어에 정의되는 Label을 정의하는 클래스
+ */
 
 public class Label {
 

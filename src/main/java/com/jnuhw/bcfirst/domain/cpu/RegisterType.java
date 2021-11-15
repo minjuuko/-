@@ -1,5 +1,9 @@
 package com.jnuhw.bcfirst.domain.cpu;
 
+/*
+ * Register에 관한 정보를 정의하는 자료구조
+ */
+
 public enum RegisterType {
     AR(12, false),
     PC(12, false),

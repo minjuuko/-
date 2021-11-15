@@ -2,6 +2,11 @@ package com.jnuhw.bcfirst.domain.assembler;
 
 import com.jnuhw.bcfirst.view.OutputView;
 
+/*
+ * 메모리, 레지스터, 플립플롭의 비트데이터(워드)를 정의한 클래스
+ * 값을 조작하거나, 오버플로우를 감지함
+ */
+
 public class BitData {
 
     private final int bitSize;

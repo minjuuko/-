@@ -1,5 +1,10 @@
 package com.jnuhw.bcfirst.domain.assembler;
 
+/*
+ * Instruction에 관한 정보를 정의하고
+ * 이와 관련된 기능들을 정의하는 메소드를 가진 자료구조
+ */
+
 public enum Instruction {
 
     ETC(0, false),

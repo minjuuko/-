@@ -8,6 +8,12 @@ import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.Arrays;
 
+/*
+ * 프로그램 실행단계에 관한 기능을 정의한 클래스
+ * 프로그램 전체 흐름 조작하고
+ * Instruction Cycle, Interrupt Cycle을 분기함.
+ */
+
 public class Executor {
 
     private final CPUEngine cpuEngine = CPUEngine.getInstance();

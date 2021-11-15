@@ -6,7 +6,14 @@ import com.jnuhw.bcfirst.domain.assembler.Memory;
 
 import java.util.HashMap;
 
+/*
+ * CPU를 코드로 구현한 가상 엔진
+ * 모든 레지스터와 플립플롭을 HashMap 형태로 가지고 있으며,
+ * 각각의 값을 조작 및 반환함
+ */
+
 public class CPUEngine {
+    // 하나만 존재해야하고, 어디서든 접근할 수 있도록 싱글톤으로 관리
     private static CPUEngine instance;
     public static CPUEngine getInstance() {
         if (instance == null) {

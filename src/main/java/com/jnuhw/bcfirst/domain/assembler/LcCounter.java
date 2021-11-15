@@ -1,5 +1,9 @@
 package com.jnuhw.bcfirst.domain.assembler;
 
+/*
+ * Pass에서 사용되는 Lc값을 조작 및 관리하는 클래스
+ */
+
 public class LcCounter {
 
     public static final int DEFAULT_LC = 0;

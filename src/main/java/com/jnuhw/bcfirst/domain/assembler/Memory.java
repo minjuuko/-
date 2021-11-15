@@ -3,6 +3,10 @@ package com.jnuhw.bcfirst.domain.assembler;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * 메모리를 정의하고, 값을 조작 및 관리하는 클래스
+ */
+
 public class Memory {
 
     public static int MEMORY_SIZE = 4096;

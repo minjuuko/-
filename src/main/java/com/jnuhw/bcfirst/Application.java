@@ -1,7 +1,6 @@
 package com.jnuhw.bcfirst;
 
 import com.jnuhw.bcfirst.controller.AssemblerController;
-import com.jnuhw.bcfirst.view.InputView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +12,6 @@ public class Application {
 
     public static void main(String[] args) {
         AssemblerController assemblerController = new AssemblerController();
-//        List<String> program = InputView.inputAssemblerProgram();
 
         if (args.length == 0) {
             System.exit(0);
@@ -36,6 +34,5 @@ public class Application {
         } catch (IOException e) {
             System.exit(0);
         }
-
     }
 }

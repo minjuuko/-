@@ -8,7 +8,13 @@ import com.jnuhw.bcfirst.view.InputView;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Input/Output Interrupt를 관리하는 클래스
+ * 플래그를 확인 혹은 조작하거나, 실제 인터럽트의 흐름을 조작함.
+ */
+
 public class Interrupt {
+    // 하나만 존재해야하고, 어디서든 접근할 수 있도록 싱글톤으로 관리
     private static Interrupt instance;
     public static Interrupt getInstance() {
         if (instance == null) {

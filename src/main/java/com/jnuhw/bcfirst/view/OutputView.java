@@ -15,10 +15,6 @@ public class OutputView {
 
     private static HashMap<Integer, Integer> prevMemoryDatas;
 
-    public static void printMemory(int address, int value) {
-        System.out.println("Memory[" + address + "] data : " + String.format("0X%04X", value));
-    }
-
     public static void printErrorAnnouncement() {
         System.out.println("프로그램이 실행 중 오류로 인해 종료되었습니다.");
     }

@@ -6,6 +6,11 @@ import com.jnuhw.bcfirst.view.OutputView;
 
 import java.util.*;
 
+/*
+ * Fist Pass, Second Pass 의 흐름을 조작하고, 관련된 모든 메소드가 정의된 클래스
+ * Lc값이나 addressLabelTable과 같은 pass에 중요한 정보들도 관리함
+ */
+
 public class Parser {
 
     private final LcCounter lcCounter = new LcCounter();
