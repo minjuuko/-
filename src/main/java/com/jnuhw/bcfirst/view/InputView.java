@@ -10,21 +10,21 @@ public class InputView {
 
     static Scanner scanner = new Scanner(System.in);
 
-//    public static List<String> inputAssemblerProgram() {
-//        List<String> program = new ArrayList<>();
-//        String command;
-//        do {
-//            String code = scanner.nextLine().toUpperCase(Locale.ROOT);
-//            if(code.startsWith("SUB")) {
-//                program = addSubroutine(program, code.split(" ")[1]);
-//            } else {
-//                program.add(code);
-//            }
-//            command = code.split(" ")[0];
-//        } while (!command.equals("END"));
-//
-//        return program;
-//    }
+    public static List<String> inputAssemblerProgram() {
+        List<String> program = new ArrayList<>();
+        String command;
+        do {
+            String code = scanner.nextLine().toUpperCase(Locale.ROOT);
+            if(code.startsWith("SUB")) {
+                program = addSubroutine(program, code.split(" ")[1]);
+            } else {
+                program.add(code);
+            }
+            command = code.split(" ")[0];
+        } while (!command.equals("END"));
+
+        return program;
+    }
 
     public static int inputStartLc() {
         System.out.println();

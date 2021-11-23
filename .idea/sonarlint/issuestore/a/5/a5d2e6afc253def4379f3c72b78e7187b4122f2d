@@ -1,0 +1,8 @@
+
+\
+java:S1126|"AReplace this if-then-else statement by a single return statement.(şáëùÿÿÿÿ
+=	java:S131‡""Add a default case to this switch.( ±ìûûÿÿÿÿ
+S
+java:S3655©"7Call "Optional#isPresent()" before accessing the value.(¶óÿÿÿÿÿ
+S
+java:S3655¯"7Call "Optional#isPresent()" before accessing the value.(¶óÿÿÿÿÿ

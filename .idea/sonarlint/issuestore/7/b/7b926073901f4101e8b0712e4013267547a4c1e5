@@ -1,0 +1,10 @@
+
+q
+java:S3008"VRename this field "MEMORY_SIZE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ßž¡Öþÿÿÿÿ
+Q	java:S125"<This block of commented-out lines of code should be removed.(êýÙÆ
+r
+java:S1104"WMake MEMORY_SIZE a static final constant or non-public and provide accessors if needed.(ßž¡Öþÿÿÿÿ
+L
+java:S1444"1Make this "public static MEMORY_SIZE" field final(ßž¡Öþÿÿÿÿ
++
+java:S1700"Rename field "memory"(™ãÅÛ

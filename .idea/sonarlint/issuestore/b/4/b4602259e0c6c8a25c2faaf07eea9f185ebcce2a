@@ -1,0 +1,19 @@
+
+\
+java:S1118":Add a private constructor to hide the implicit public one.(¯é•Ÿüÿÿÿÿ8«»ð§Ò/
+U	java:S106"9Replace this use of System.out or System.err by a logger.(òå¬˜8®»ð§Ò/
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(Íõ ýýÿÿÿÿ8®»ð§Ò/
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ËÈžÝ8¯»ð§Ò/
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(êåù—üÿÿÿÿ8¯»ð§Ò/
+Z	java:S106 "9Replace this use of System.out or System.err by a logger.(¢Óáæþÿÿÿÿ8¯»ð§Ò/
+Z	java:S106/"9Replace this use of System.out or System.err by a logger.(ªÓ¼áþÿÿÿÿ8³»ð§Ò/
+Z	java:S1060"9Replace this use of System.out or System.err by a logger.(ªÓ¼áþÿÿÿÿ8³»ð§Ò/
+U	java:S1061"9Replace this use of System.out or System.err by a logger.(Þ¦Ô¸8³»ð§Ò/
+U	java:S1062"9Replace this use of System.out or System.err by a logger.(È“·”8³»ð§Ò/
+T	java:S1068"9Replace this use of System.out or System.err by a logger.(àÿ›28µ»ð§Ò/
+U	java:S106;"9Replace this use of System.out or System.err by a logger.(ý¥Î“8µ»ð§Ò/
+Z	java:S106B"9Replace this use of System.out or System.err by a logger.(ÄÔ©àÿÿÿÿÿ8¶»ð§Ò/
+U	java:S106E"9Replace this use of System.out or System.err by a logger.(ò¶úÁ8¶»ð§Ò/
+U	java:S106K"9Replace this use of System.out or System.err by a logger.(°°·â8·»ð§Ò/
+Q
+java:S2864R"4Iterate over the "entrySet" instead of the "keySet".(à…žþ8¸»ð§Ò/

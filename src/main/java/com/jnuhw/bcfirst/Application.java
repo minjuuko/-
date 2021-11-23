@@ -1,6 +1,7 @@
 package com.jnuhw.bcfirst;
 
 import com.jnuhw.bcfirst.controller.AssemblerController;
+import com.jnuhw.bcfirst.view.InputView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,17 +23,20 @@ public class Application {
             System.exit(0);
         }
 
-        try {
-            List<String> program = new ArrayList<>();
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            while (br.ready()) {
-                program.add(br.readLine());
-            }
-            br.close();
+        List<String> program = InputView.inputAssemblerProgram();
+        assemblerController.run(program);
 
-            assemblerController.run(program);
-        } catch (IOException e) {
-            System.exit(0);
-        }
+//        try {
+//            List<String> program = new ArrayList<>();
+//            BufferedReader br = new BufferedReader(new FileReader(file));
+//            while (br.ready()) {
+//                program.add(br.readLine());
+//            }
+//            br.close();
+//
+//            assemblerController.run(program);
+//        } catch (IOException e) {
+//            System.exit(0);
+//        }
     }
 }

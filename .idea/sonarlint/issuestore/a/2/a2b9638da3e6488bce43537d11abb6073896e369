@@ -1,0 +1,8 @@
+
+z	java:S1312"YComplete cases by adding the missing enum constants or add a default case to this switch.( ±ìûûÿÿÿÿ8‘¿ŒõÏ/
+f
+java:S13012"KReplace this "switch" statement by "if" statements to increase readability.( ±ìûûÿÿÿÿ
+A
+java:S1640 "Convert this Map to an EnumMap.(½äÁüÿÿÿÿ8 ¿ŒõÏ/
+A
+java:S1640!"Convert this Map to an EnumMap.(³İÌ“üÿÿÿÿ8¡¿ŒõÏ/
